@@ -7,12 +7,20 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     body { background-color: #0f172a; color: #f8fafc; padding: 24px; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
     .title { font-size: 24px; font-weight: 700; color: #38bdf8; }
+
+    .filter-bar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; background: #1e293b; padding: 16px; border-radius: 12px; border: 1px solid #334155; }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 160px; }
+    .filter-group label { font-size: 12px; font-weight: 600; color: #94a3b8; text-transform: uppercase; }
+    .filter-select, .search-input { background: #0f172a; color: #f8fafc; border: 1px solid #334155; padding: 10px 14px; border-radius: 8px; font-size: 14px; outline: none; }
+    .filter-select:focus, .search-input:focus { border-color: #38bdf8; }
+
     .kpi-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .kpi-card { background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155; }
     .kpi-label { font-size: 14px; color: #94a3b8; margin-bottom: 8px; }
     .kpi-value { font-size: 24px; font-weight: 700; color: #f8fafc; }
+
     .table-container { background: #1e293b; border-radius: 12px; border: 1px solid #334155; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; text-align: left; }
     th { background: #0f172a; color: #94a3b8; padding: 14px; font-size: 13px; text-transform: uppercase; }
@@ -31,85 +39,4 @@
     <button class="refresh-btn" onclick="fetchData()">Refresh Data</button>
   </div>
 
-  <div class="kpi-container">
-    <div class="kpi-card">
-      <div class="kpi-label">Total Revenue</div>
-      <div class="kpi-value" id="kpi-total">RM 0.00</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Printing Service</div>
-      <div class="kpi-value" id="kpi-printing">RM 0.00</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Laptop Service</div>
-      <div class="kpi-value" id="kpi-laptop">RM 0.00</div>
-    </div>
-  </div>
-
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Type</th>
-          <th>Business</th>
-          <th>Payment</th>
-          <th>Description</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody id="table-body">
-        <tr><td colspan="6" style="text-align:center;">Loading data...</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <script>
-    
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoUWhWM08VMm_fV1FH9hw_G5RlTjxDUaorTDpSZOefmH_eoHj70n7BsW8AcB72Kcp7Gw/exec";
-
-    async function fetchData() {
-      const tbody = document.getElementById("table-body");
-      try {
-        const response = await fetch(SCRIPT_URL);
-        const data = await response.json();
-        
-        tbody.innerHTML = "";
-        let total = 0, printing = 0, laptop = 0;
-
-        data.forEach(row => {
-          const amt = Number(row.amount) || 0;
-          total += amt;
-          
-          if (row.business.toLowerCase().includes("printing")) printing += amt;
-          if (row.business.toLowerCase().includes("laptop")) laptop += amt;
-
-          const badgeClass = row.type.toLowerCase() === "expense" ? "badge-expense" : "badge-income";
-          
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${row.date}</td>
-            <td><span class="badge ${badgeClass}">${row.type}</span></td>
-            <td>${row.business}</td>
-            <td>${row.paymentMethod}</td>
-            <td>${row.description}</td>
-            <td><strong>RM ${amt.toFixed(2)}</strong></td>
-          `;
-          tbody.appendChild(tr);
-        });
-
-        document.getElementById("kpi-total").innerText = `RM ${total.toFixed(2)}`;
-        document.getElementById("kpi-printing").innerText = `RM ${printing.toFixed(2)}`;
-        document.getElementById("kpi-laptop").innerText = `RM ${laptop.toFixed(2)}`;
-
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#f87171;">Error loading data. Verify your Apps Script URL.</td></tr>`;
-      }
-    }
-
-    // Auto-fetch data when page opens and auto-refresh every 10 seconds
-    fetchData();
-    setInterval(fetchData, 10000);
-  </script>
-</body>
-</html>
+  <!-- Filter Bar for Business, Month, and Search -->
