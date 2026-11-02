@@ -40,3 +40,182 @@
   </div>
 
   <!-- Filter Bar for Business, Month, and Search -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label for="business-filter">Filter Business</label>
+      <select id="business-filter" class="filter-select" onchange="renderDashboard()">
+        <option value="all">All Businesses</option>
+        <option value="printing">Printing Service</option>
+        <option value="laptop">Laptop Service</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="month-filter">Filter Month</label>
+      <select id="month-filter" class="filter-select" onchange="renderDashboard()">
+        <option value="all">All Months</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="search-input">Search Description</label>
+      <input type="text" id="search-input" class="search-input" placeholder="Type to search..." oninput="renderDashboard()">
+    </div>
+  </div>
+
+  <!-- Dynamic KPI Cards -->
+  <div class="kpi-container">
+    <div class="kpi-card">
+      <div class="kpi-label">Filtered Revenue</div>
+      <div class="kpi-value" id="kpi-total">RM 0.00</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Printing Service</div>
+      <div class="kpi-value" id="kpi-printing">RM 0.00</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Laptop Service</div>
+      <div class="kpi-value" id="kpi-laptop">RM 0.00</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Transactions</div>
+      <div class="kpi-value" id="kpi-count">0</div>
+    </div>
+  </div>
+
+  <!-- Transaction Data Table -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Business</th>
+          <th>Payment</th>
+          <th>Description</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr><td colspan="6" style="text-align:center;">Loading data...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Paste your Google Apps Script Web App URL below:
+    const SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE";
+
+    let rawData = [];
+
+    // Extract Month-Year (e.g., "Nov 2026") from date strings
+    function getMonthKey(dateStr) {
+      if (!dateStr) return "Unknown";
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+      }
+      const match = dateStr.match(/([A-Za-z]{3})\s+(\d{4})/);
+      if (match) return `${match[1]} ${match[2]}`;
+      return "Other";
+    }
+
+    // Fetch live JSON data from Apps Script
+    async function fetchData() {
+      const tbody = document.getElementById("table-body");
+      try {
+        const response = await fetch(SCRIPT_URL);
+        rawData = await response.json();
+        
+        populateMonthDropdown();
+        renderDashboard();
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#f87171;">Error loading data. Verify your Apps Script URL.</td></tr>`;
+      }
+    }
+
+    // Dynamically build month filter options based on entries
+    function populateMonthDropdown() {
+      const monthSelect = document.getElementById("month-filter");
+      const currentSelected = monthSelect.value;
+      
+      const monthsSet = new Set();
+      rawData.forEach(row => {
+        const monthKey = getMonthKey(row.date);
+        if (monthKey !== "Unknown") monthsSet.add(monthKey);
+      });
+
+      monthSelect.innerHTML = `<option value="all">All Months</option>`;
+      monthsSet.forEach(month => {
+        const option = document.createElement("option");
+        option.value = month;
+        option.textContent = month;
+        monthSelect.appendChild(option);
+      });
+
+      if (Array.from(monthSelect.options).some(opt => opt.value === currentSelected)) {
+        monthSelect.value = currentSelected;
+      }
+    }
+
+    // Filter data and update table + KPI cards
+    function renderDashboard() {
+      const businessFilter = document.getElementById("business-filter").value.toLowerCase();
+      const monthFilter = document.getElementById("month-filter").value;
+      const searchQuery = document.getElementById("search-input").value.toLowerCase();
+      const tbody = document.getElementById("table-body");
+
+      tbody.innerHTML = "";
+
+      let total = 0, printing = 0, laptop = 0, count = 0;
+
+      const filtered = rawData.filter(row => {
+        const matchesBusiness = businessFilter === "all" || (row.business && row.business.toLowerCase().includes(businessFilter));
+        const matchesMonth = monthFilter === "all" || getMonthKey(row.date) === monthFilter;
+        const matchesSearch = !searchQuery || 
+          (row.description && row.description.toLowerCase().includes(searchQuery)) ||
+          (row.business && row.business.toLowerCase().includes(searchQuery)) ||
+          (row.paymentMethod && row.paymentMethod.toLowerCase().includes(searchQuery));
+
+        return matchesBusiness && matchesMonth && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#94a3b8;">No matching transactions found.</td></tr>`;
+      } else {
+        filtered.forEach(row => {
+          const amt = Number(row.amount) || 0;
+          total += amt;
+          count++;
+
+          if (row.business && row.business.toLowerCase().includes("printing")) printing += amt;
+          if (row.business && row.business.toLowerCase().includes("laptop")) laptop += amt;
+
+          const badgeClass = row.type && row.type.toLowerCase() === "expense" ? "badge-expense" : "badge-income";
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.date || ""}</td>
+            <td><span class="badge ${badgeClass}">${row.type || "Income"}</span></td>
+            <td>${row.business || ""}</td>
+            <td>${row.paymentMethod || ""}</td>
+            <td>${row.description || ""}</td>
+            <td><strong>RM ${amt.toFixed(2)}</strong></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      document.getElementById("kpi-total").innerText = `RM ${total.toFixed(2)}`;
+      document.getElementById("kpi-printing").innerText = `RM ${printing.toFixed(2)}`;
+      document.getElementById("kpi-laptop").innerText = `RM ${laptop.toFixed(2)}`;
+      document.getElementById("kpi-count").innerText = count;
+    }
+
+    // Initial load and auto-refresh every 10 seconds
+    fetchData();
+    setInterval(fetchData, 10000);
+  </script>
+</body>
+</html>
