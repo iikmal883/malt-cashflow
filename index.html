@@ -6,89 +6,177 @@
   <title>MalT Cash Flow Live Dashboard</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    body { background-color: #0f172a; color: #f8fafc; padding: 24px; }
     
-    /* Header Styling */
+    /* Deep Cyber-Purple Theme Base */
+    body { 
+      background-color: #0d0b18; 
+      color: #f3e8ff; 
+      padding: 24px;
+      min-height: 100vh;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0d0b18; }
+    ::-webkit-scrollbar-thumb { background: #3b0764; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #7e22ce; }
+
+    /* Header & Navigation */
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
     .header-left { display: flex; align-items: center; gap: 12px; }
-    .title { font-size: 24px; font-weight: 700; color: #38bdf8; }
+    .title { 
+      font-size: 26px; 
+      font-weight: 800; 
+      background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #38bdf8 100%); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+      letter-spacing: -0.5px;
+    }
 
-    /* Digital Clock & Animated Live Badge */
+    /* Animated Cyber Clock Badge */
     .clock-card { 
-      background: #1e293b; 
-      border: 1px solid #334155; 
+      background: rgba(24, 20, 42, 0.7); 
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(168, 85, 247, 0.3); 
       padding: 10px 18px; 
-      border-radius: 12px; 
+      border-radius: 14px; 
       display: flex; 
       align-items: center; 
       gap: 14px;
-      animation: borderGlow 4s infinite alternate ease-in-out;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
+      animation: purpleGlow 4s infinite alternate ease-in-out;
     }
     .live-dot {
       width: 10px;
       height: 10px;
-      background-color: #10b981;
+      background-color: #a855f7;
       border-radius: 50%;
       display: inline-block;
       animation: pulseDot 1.5s infinite ease-in-out;
     }
-    .clock-time { font-size: 18px; font-weight: 700; color: #f8fafc; font-family: monospace; }
-    .clock-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
+    .clock-time { font-size: 17px; font-weight: 700; color: #f3e8ff; font-family: monospace; }
+    .clock-label { font-size: 10px; color: #c084fc; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
 
-    /* Filters */
-    .filter-bar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; background: #1e293b; padding: 16px; border-radius: 12px; border: 1px solid #334155; }
-    .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 160px; }
-    .filter-group label { font-size: 12px; font-weight: 600; color: #94a3b8; text-transform: uppercase; }
-    .filter-select, .search-input { background: #0f172a; color: #f8fafc; border: 1px solid #334155; padding: 10px 14px; border-radius: 8px; font-size: 14px; outline: none; }
-    .filter-select:focus, .search-input:focus { border-color: #38bdf8; }
+    /* Glassmorphism Multi-Filter Bar */
+    .filter-bar { 
+      display: flex; 
+      gap: 12px; 
+      margin-bottom: 24px; 
+      flex-wrap: wrap; 
+      background: #18142a; 
+      padding: 18px; 
+      border-radius: 16px; 
+      border: 1px solid #2e2348;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 140px; }
+    .filter-group label { font-size: 11px; font-weight: 700; color: #a855f7; text-transform: uppercase; letter-spacing: 0.5px; }
+    .filter-select, .search-input { 
+      background: #0d0b18; 
+      color: #f3e8ff; 
+      border: 1px solid #3b2d59; 
+      padding: 10px 14px; 
+      border-radius: 10px; 
+      font-size: 14px; 
+      outline: none; 
+      transition: all 0.2s ease;
+    }
+    .filter-select:focus, .search-input:focus { 
+      border-color: #a855f7; 
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+    }
 
-    /* KPI Cards with Looping Pulse Animation */
-    .kpi-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    /* Futuristic KPI Cards */
+    .kpi-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .kpi-card { 
-      background: #1e293b; 
+      background: #18142a; 
       padding: 20px; 
-      border-radius: 12px; 
-      border: 1px solid #334155; 
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      border-radius: 16px; 
+      border: 1px solid #2e2348; 
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25 ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #a855f7, #c084fc);
     }
     .kpi-card:hover {
-      transform: translateY(-2px);
-      border-color: #38bdf8;
+      transform: translateY(-4px);
+      border-color: #a855f7;
+      box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.25);
     }
-    .kpi-label { font-size: 14px; color: #94a3b8; margin-bottom: 8px; }
-    .kpi-value { font-size: 24px; font-weight: 700; color: #f8fafc; }
 
-    /* Table Styling */
-    .table-container { background: #1e293b; border-radius: 12px; border: 1px solid #334155; overflow-x: auto; }
+    /* Accent top borders for individual KPIs */
+    .kpi-card.card-gross::before { background: linear-gradient(90deg, #10b981, #34d399); }
+    .kpi-card.card-expense::before { background: linear-gradient(90deg, #f43f5e, #fb7185); }
+    .kpi-card.card-net::before { background: linear-gradient(90deg, #c084fc, #38bdf8); }
+    .kpi-card.card-printing::before { background: linear-gradient(90deg, #818cf8, #a78bfa); }
+    .kpi-card.card-laptop::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+    .kpi-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .kpi-value { font-size: 24px; font-weight: 800; color: #f3e8ff; }
+    
+    .text-income { color: #34d399; }
+    .text-expense { color: #fb7185; }
+    .text-net { color: #c084fc; }
+
+    /* Modern Dark Table */
+    .table-container { 
+      background: #18142a; 
+      border-radius: 16px; 
+      border: 1px solid #2e2348; 
+      overflow: hidden; 
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
     table { width: 100%; border-collapse: collapse; text-align: left; }
-    th { background: #0f172a; color: #94a3b8; padding: 14px; font-size: 13px; text-transform: uppercase; }
-    td { padding: 14px; border-top: 1px solid #334155; font-size: 14px; }
-    .badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
-    .badge-income { background: #064e3b; color: #6ee7b7; }
-    .badge-expense { background: #7f1d1d; color: #fca5a5; }
+    th { 
+      background: #120e22; 
+      color: #c084fc; 
+      padding: 16px; 
+      font-size: 12px; 
+      text-transform: uppercase; 
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid #2e2348;
+    }
+    td { padding: 16px; border-top: 1px solid #231b39; font-size: 14px; }
+    tr:hover td { background: rgba(168, 85, 247, 0.04); }
 
+    /* Neon Badges */
+    .badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-income { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-expense { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+
+    /* Button Styling */
     .refresh-btn { 
-      background: #0284c7; 
+      background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%); 
       color: #fff; 
       border: none; 
-      padding: 10px 18px; 
-      border-radius: 8px; 
+      padding: 10px 20px; 
+      border-radius: 10px; 
       cursor: pointer; 
-      font-weight: 600; 
-      transition: background 0.2s ease;
+      font-weight: 700; 
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
     }
-    .refresh-btn:hover { background: #0369a1; }
+    .refresh-btn:hover { 
+      background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); 
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
+    }
 
-    /* --- Keyframe Looping Animations --- */
+    /* Keyframe Animations */
     @keyframes pulseDot {
-      0% { transform: scale(0.9); opacity: 0.4; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-      50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-      100% { transform: scale(0.9); opacity: 0.4; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+      0% { transform: scale(0.9); opacity: 0.4; box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.8); }
+      50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 0 6px rgba(168, 85, 247, 0); }
+      100% { transform: scale(0.9); opacity: 0.4; box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
     }
 
-    @keyframes borderGlow {
-      0% { border-color: rgba(56, 189, 248, 0.2); box-shadow: 0 0 8px rgba(56, 189, 248, 0.05); }
-      100% { border-color: rgba(56, 189, 248, 0.6); box-shadow: 0 0 16px rgba(56, 189, 248, 0.2); }
+    @keyframes purpleGlow {
+      0% { border-color: rgba(168, 85, 247, 0.2); box-shadow: 0 0 10px rgba(168, 85, 247, 0.1); }
+      100% { border-color: rgba(168, 85, 247, 0.6); box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
     }
   </style>
 </head>
@@ -99,7 +187,7 @@
       <h1 class="title">MalT Cash Flow Live Dashboard</h1>
     </div>
 
-    <!-- Digital Clock & Animated Live Status -->
+    <!-- Cyber Clock & Live Status -->
     <div class="clock-card">
       <span class="live-dot" title="Live Sync Active"></span>
       <div>
@@ -110,10 +198,30 @@
     </div>
   </div>
 
-  <!-- Filter Bar for Business, Month, and Search -->
+  <!-- Multi-Filter Bar -->
   <div class="filter-bar">
     <div class="filter-group">
-      <label for="business-filter">Filter Business</label>
+      <label for="timeframe-filter">Time Period</label>
+      <select id="timeframe-filter" class="filter-select" onchange="renderDashboard()">
+        <option value="all">All Time</option>
+        <option value="today">Today</option>
+        <option value="weekly">This Week</option>
+        <option value="monthly">This Month</option>
+        <option value="yearly">This Year</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="type-filter">Type</label>
+      <select id="type-filter" class="filter-select" onchange="renderDashboard()">
+        <option value="all">Income & Expense</option>
+        <option value="income">Income Only</option>
+        <option value="expense">Expense Only</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="business-filter">Business</label>
       <select id="business-filter" class="filter-select" onchange="renderDashboard()">
         <option value="all">All Businesses</option>
         <option value="printing">Printing Service</option>
@@ -130,26 +238,34 @@
 
     <div class="filter-group">
       <label for="search-input">Search Description</label>
-      <input type="text" id="search-input" class="search-input" placeholder="Type to search..." oninput="renderDashboard()">
+      <input type="text" id="search-input" class="search-input" placeholder="Search item, method..." oninput="renderDashboard()">
     </div>
   </div>
 
-  <!-- Dynamic KPI Cards -->
+  <!-- Dynamic Financial KPI Cards -->
   <div class="kpi-container">
-    <div class="kpi-card">
-      <div class="kpi-label">Filtered Revenue</div>
-      <div class="kpi-value" id="kpi-total">RM 0.00</div>
+    <div class="kpi-card card-gross">
+      <div class="kpi-label">Gross Income</div>
+      <div class="kpi-value text-income" id="kpi-gross">RM 0.00</div>
     </div>
-    <div class="kpi-card">
+    <div class="kpi-card card-expense">
+      <div class="kpi-label">Total Expenses</div>
+      <div class="kpi-value text-expense" id="kpi-expenses">RM 0.00</div>
+    </div>
+    <div class="kpi-card card-net">
+      <div class="kpi-label">Nett Total (RM)</div>
+      <div class="kpi-value text-net" id="kpi-net">RM 0.00</div>
+    </div>
+    <div class="kpi-card card-printing">
       <div class="kpi-label">Printing Service</div>
       <div class="kpi-value" id="kpi-printing">RM 0.00</div>
     </div>
-    <div class="kpi-card">
+    <div class="kpi-card card-laptop">
       <div class="kpi-label">Laptop Service</div>
       <div class="kpi-value" id="kpi-laptop">RM 0.00</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Total Transactions</div>
+      <div class="kpi-label">Transactions</div>
       <div class="kpi-value" id="kpi-count">0</div>
     </div>
   </div>
@@ -168,33 +284,21 @@
         </tr>
       </thead>
       <tbody id="table-body">
-        <tr><td colspan="6" style="text-align:center;">Loading data...</td></tr>
+        <tr><td colspan="6" style="text-align:center; color:#c084fc;">Loading live cash flow data...</td></tr>
       </tbody>
     </table>
   </div>
 
   <script>
-    // Replace with your Google Apps Script Web App URL:
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoUWhWM08VMm_fV1FH9hw_G5RlTjxDUaorTDpSZOefmH_eoHj70n7BsW8AcB72Kcp7Gw/exec";
 
     let rawData = [];
 
-    // Real-Time Digital Clock locked to Asia/Kuala_Lumpur (Malaysia Time)
+    // Real-Time Digital Clock (MYT)
     function updateMalaysiaClock() {
       const now = new Date();
-      const timeOptions = {
-        timeZone: 'Asia/Kuala_Lumpur',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
-      };
-      const dateOptions = {
-        timeZone: 'Asia/Kuala_Lumpur',
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      };
+      const timeOptions = { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+      const dateOptions = { timeZone: 'Asia/Kuala_Lumpur', day: '2-digit', month: 'short', year: 'numeric' };
       
       const timeString = now.toLocaleTimeString('en-US', timeOptions);
       const dateString = now.toLocaleDateString('en-US', dateOptions);
@@ -205,15 +309,22 @@
     setInterval(updateMalaysiaClock, 1000);
     updateMalaysiaClock();
 
-    // Extract Month-Year (e.g., "Nov 2026") from date strings
-    function getMonthKey(dateStr) {
-      if (!dateStr) return "Unknown";
+    // Safe Date Parsing Helper
+    function parseDate(dateStr) {
+      if (!dateStr) return null;
       const d = new Date(dateStr);
-      if (!isNaN(d.getTime())) {
+      if (!isNaN(d.getTime())) return d;
+      return null;
+    }
+
+    // Extract Month-Year (e.g., "Nov 2026")
+    function getMonthKey(dateStr) {
+      const d = parseDate(dateStr);
+      if (d) {
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         return `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
       }
-      const match = dateStr.match(/([A-Za-z]{3})\s+(\d{4})/);
+      const match = String(dateStr).match(/([A-Za-z]{3})\s+(\d{4})/);
       if (match) return `${match[1]} ${match[2]}`;
       return "Other";
     }
@@ -228,7 +339,7 @@
         populateMonthDropdown();
         renderDashboard();
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#f87171;">Error loading data. Verify your Apps Script URL.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#fb7185;">Error loading data. Verify your Apps Script URL.</td></tr>`;
       }
     }
 
@@ -240,7 +351,7 @@
       const monthsSet = new Set();
       rawData.forEach(row => {
         const monthKey = getMonthKey(row.date);
-        if (monthKey !== "Unknown") monthsSet.add(monthKey);
+        if (monthKey !== "Other") monthsSet.add(monthKey);
       });
 
       monthSelect.innerHTML = `<option value="all">All Months</option>`;
@@ -256,8 +367,33 @@
       }
     }
 
-    // Filter data and update table + KPI cards
+    // Check timeframe filters (Today, Week, Month, Year)
+    function matchesTimeframe(dateStr, timeframe) {
+      if (timeframe === "all") return true;
+      const date = parseDate(dateStr);
+      if (!date) return true;
+
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      if (timeframe === "today") {
+        return date >= today;
+      } else if (timeframe === "weekly") {
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay());
+        return date >= startOfWeek;
+      } else if (timeframe === "monthly") {
+        return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+      } else if (timeframe === "yearly") {
+        return date.getFullYear() === now.getFullYear();
+      }
+      return true;
+    }
+
+    // Main render & math logic engine
     function renderDashboard() {
+      const timeframeFilter = document.getElementById("timeframe-filter").value;
+      const typeFilter = document.getElementById("type-filter").value.toLowerCase();
       const businessFilter = document.getElementById("business-filter").value.toLowerCase();
       const monthFilter = document.getElementById("month-filter").value;
       const searchQuery = document.getElementById("search-input").value.toLowerCase();
@@ -265,52 +401,79 @@
 
       tbody.innerHTML = "";
 
-      let total = 0, printing = 0, laptop = 0, count = 0;
+      let grossIncome = 0;
+      let totalExpenses = 0;
+      let printingNet = 0;
+      let laptopNet = 0;
+      let count = 0;
 
       const filtered = rawData.filter(row => {
+        const type = (row.type || "Income").toLowerCase();
+        const matchesType = typeFilter === "all" || type === typeFilter;
         const matchesBusiness = businessFilter === "all" || (row.business && row.business.toLowerCase().includes(businessFilter));
         const matchesMonth = monthFilter === "all" || getMonthKey(row.date) === monthFilter;
+        const matchesTime = matchesTimeframe(row.date, timeframeFilter);
         const matchesSearch = !searchQuery || 
           (row.description && row.description.toLowerCase().includes(searchQuery)) ||
           (row.business && row.business.toLowerCase().includes(searchQuery)) ||
           (row.paymentMethod && row.paymentMethod.toLowerCase().includes(searchQuery));
 
-        return matchesBusiness && matchesMonth && matchesSearch;
+        return matchesType && matchesBusiness && matchesMonth && matchesTime && matchesSearch;
       });
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#94a3b8;">No matching transactions found.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#c084fc;">No matching transactions found.</td></tr>`;
       } else {
         filtered.forEach(row => {
           const amt = Number(row.amount) || 0;
-          total += amt;
+          const isExpense = row.type && row.type.toLowerCase() === "expense";
           count++;
 
-          if (row.business && row.business.toLowerCase().includes("printing")) printing += amt;
-          if (row.business && row.business.toLowerCase().includes("laptop")) laptop += amt;
+          if (isExpense) {
+            totalExpenses += amt;
+          } else {
+            grossIncome += amt;
+          }
 
-          const badgeClass = row.type && row.type.toLowerCase() === "expense" ? "badge-expense" : "badge-income";
+          // Service Net Totals (Gross Income minus expenses for each branch)
+          if (row.business && row.business.toLowerCase().includes("printing")) {
+            printingNet += isExpense ? -amt : amt;
+          }
+          if (row.business && row.business.toLowerCase().includes("laptop")) {
+            laptopNet += isExpense ? -amt : amt;
+          }
+
+          const badgeClass = isExpense ? "badge-expense" : "badge-income";
 
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${row.date || ""}</td>
-            <td><span class="badge ${badgeClass}">${row.type || "Income"}</span></td>
+            <td><span class="badge ${badgeClass}">${isExpense ? "Expense" : "Income"}</span></td>
             <td>${row.business || ""}</td>
             <td>${row.paymentMethod || ""}</td>
             <td>${row.description || ""}</td>
-            <td><strong>RM ${amt.toFixed(2)}</strong></td>
+            <td><strong>${isExpense ? "-" : ""}RM ${amt.toFixed(2)}</strong></td>
           `;
           tbody.appendChild(tr);
         });
       }
 
-      document.getElementById("kpi-total").innerText = `RM ${total.toFixed(2)}`;
-      document.getElementById("kpi-printing").innerText = `RM ${printing.toFixed(2)}`;
-      document.getElementById("kpi-laptop").innerText = `RM ${laptop.toFixed(2)}`;
+      const netTotal = grossIncome - totalExpenses;
+
+      // Update Dashboard KPIs
+      document.getElementById("kpi-gross").innerText = `RM ${grossIncome.toFixed(2)}`;
+      document.getElementById("kpi-expenses").innerText = `RM ${totalExpenses.toFixed(2)}`;
+      
+      const netKpiElem = document.getElementById("kpi-net");
+      netKpiElem.innerText = `RM ${netTotal.toFixed(2)}`;
+      netKpiElem.style.color = netTotal < 0 ? "#fb7185" : "#c084fc";
+
+      document.getElementById("kpi-printing").innerText = `RM ${printingNet.toFixed(2)}`;
+      document.getElementById("kpi-laptop").innerText = `RM ${laptopNet.toFixed(2)}`;
       document.getElementById("kpi-count").innerText = count;
     }
 
-    // Initial load and auto-refresh every 10 seconds
+    // Initial load & 10s auto-refresh
     fetchData();
     setInterval(fetchData, 10000);
   </script>
