@@ -42,6 +42,11 @@
       letter-spacing: -0.5px;
     }
 
+    /* Print Only Branding Header (Hidden on Web Screen) */
+    .print-header {
+      display: none;
+    }
+
     /* Animated Cyber Clock Badge */
     .clock-card { 
       background: rgba(24, 20, 42, 0.7); 
@@ -274,11 +279,11 @@
       .filter-group { min-width: 100%; }
     }
 
-    /* --- STRICT LIGHT PDF PRINT STYLING (FIXES INVISIBLE TEXT) --- */
+    /* --- STRICT LIGHT PDF PRINT STYLING & BRANDING --- */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 12mm 8mm;
+        margin: 10mm 8mm;
       }
 
       body { 
@@ -288,24 +293,46 @@
         font-size: 10px !important;
       }
 
-      /* Hide interactive UI elements */
+      /* Hide interactive web controls */
       .header, .clock-card, .filter-bar, .report-generator-bar, .pagination-bar, .refresh-btn, .download-btn { 
         display: none !important; 
       }
 
-      /* Report Header Title */
-      body::before {
-        content: "MalT Cash Flow Detailed Financial Report";
-        display: block;
-        font-size: 16px;
-        font-weight: 800;
-        color: #0f172a;
-        margin-bottom: 10px;
+      /* Centered Logo, Name & Slogan Header for PDF */
+      .print-header {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-bottom: 16px;
+        padding-bottom: 8px;
         border-bottom: 2px solid #0f172a;
-        padding-bottom: 4px;
       }
 
-      /* Compact KPI Cards */
+      .print-logo {
+        height: 60px;
+        width: auto;
+        object-fit: contain;
+        margin-bottom: 6px;
+      }
+
+      .print-company-name {
+        font-size: 18px;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -0.2px;
+        text-transform: uppercase;
+      }
+
+      .print-slogan {
+        font-size: 10px;
+        font-style: italic;
+        color: #64748b;
+        margin-top: 2px;
+      }
+
+      /* Compact KPI Cards for PDF */
       .kpi-container { 
         grid-template-columns: repeat(4, 1fr) !important; 
         gap: 6px !important; 
@@ -323,7 +350,7 @@
       .kpi-label { font-size: 8px !important; color: #475569 !important; margin-bottom: 2px !important; }
       .kpi-value { font-size: 13px !important; color: #0f172a !important; }
 
-      /* Clear Printable Table */
+      /* Table Print Formatting */
       .table-container { 
         border: 1px solid #cbd5e1 !important; 
         box-shadow: none !important; 
@@ -339,7 +366,7 @@
         min-width: 0 !important;
       }
 
-      thead { display: table-header-group !important; } /* Keeps Table Header on Page 2, Page 3, etc. */
+      thead { display: table-header-group !important; }
       tr { page-break-inside: avoid !important; page-break-after: auto !important; }
 
       th { 
@@ -352,8 +379,8 @@
       }
 
       td { 
-        background-color: #ffffff !important; /* Force white background for all rows */
-        color: #0f172a !important;            /* Force dark text for readability */
+        background-color: #ffffff !important;
+        color: #0f172a !important;
         border-bottom: 1px solid #e2e8f0 !important; 
         padding: 5px 8px !important;
         font-size: 10px !important;
@@ -372,6 +399,13 @@
   </style>
 </head>
 <body>
+
+  <!-- CENTERED PDF PRINT HEADER (Only renders during PDF Export) -->
+  <div class="print-header">
+    <img src="https://i.postimg.cc/Vsjz1ksp/logo.png" alt="Ikmal Tech Solution Logo" class="print-logo">
+    <div class="print-company-name">Ikmal Tech Solution</div>
+    <div class="print-slogan">Save your money, save your property</div>
+  </div>
 
   <div class="header">
     <div class="header-left">
