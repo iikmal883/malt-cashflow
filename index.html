@@ -23,13 +23,13 @@
 
     /* Header & Navigation */
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
-    .header-left { display: flex; align-items: center; gap: 14px; }
+    .header-left { display: flex; align-items: center; gap: 16px; }
     
-    /* Custom Logo Styling */
+    /* Custom Logo Styling - Adjusted to be larger */
     .custom-logo {
-      height: 42px;
+      height: 56px;
       width: auto;
-      max-width: 160px;
+      max-width: 200px;
       object-fit: contain;
       border-radius: 8px;
     }
@@ -197,7 +197,7 @@
 
   <div class="header">
     <div class="header-left">
-      <!-- Direct Logo URL integrated -->
+      <!-- Direct Logo Link -->
       <img src="https://i.postimg.cc/Vsjz1ksp/logo.png" alt="MalT Logo" class="custom-logo" onerror="this.style.display='none'">
       <h1 class="title">MalT Cash Flow Live Dashboard</h1>
     </div>
@@ -306,7 +306,6 @@
   </div>
 
   <script>
-    // Live Google Apps Script Web App URL integrated
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoUWhWM08VMm_fV1FH9hw_G5RlTjxDUaorTDpSZOefmH_eoHj70n7BsW8AcB72Kcp7Gw/exec";
 
     let rawData = [];
@@ -326,12 +325,14 @@
     setInterval(updateMalaysiaClock, 1000);
     updateMalaysiaClock();
 
-    // Safe Date Parsing Helper
+    // Enhanced Safe Date Parser (handles standard & Google Apps Script formatted dates like "2 Nov 2026 at 1:51 AM")
     function parseDate(dateStr) {
       if (!dateStr) return null;
-      const d = new Date(dateStr);
+      let cleanStr = String(dateStr).replace(' at ', ' ');
+      const d = new Date(cleanStr);
       if (!isNaN(d.getTime())) return d;
-      return null;
+      const fallback = new Date(dateStr);
+      return !isNaN(fallback.getTime()) ? fallback : null;
     }
 
     // Extract Month-Year (e.g., "Nov 2026")
@@ -424,7 +425,7 @@
       let laptopNet = 0;
       let count = 0;
 
-      // Filter rows
+      // 1. Filter rows
       const filtered = rawData.filter(row => {
         const type = (row.type || "Income").toLowerCase();
         const matchesType = typeFilter === "all" || type === typeFilter;
@@ -449,14 +450,14 @@
         return matchesType && matchesBusiness && matchesMonth && matchesTime && matchesSearch;
       });
 
-      // Sort rows: Newest date to oldest date
+      // 2. Strict Date Sorting (Newest/Latest Date on top)
       filtered.sort((a, b) => {
         const dateA = parseDate(a.date) || new Date(0);
         const dateB = parseDate(b.date) || new Date(0);
-        return dateB - dateA;
+        return dateB.getTime() - dateA.getTime();
       });
 
-      // Render rows
+      // 3. Render rows into table
       if (filtered.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#c084fc;">No matching transactions found.</td></tr>`;
       } else {
