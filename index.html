@@ -246,17 +246,123 @@
       100% { border-color: rgba(168, 85, 247, 0.6); box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
     }
 
-    /* Print / Download Report PDF Layout */
+    /* --- MOBILE RESPONSIVE MEDIA QUERIES --- */
+    @media (max-width: 768px) {
+      body { padding: 14px; }
+      .header { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .header-left { width: 100%; }
+      .title { font-size: 20px; }
+      .custom-logo { height: 44px; }
+      .clock-card { width: 100%; justify-content: space-between; }
+      
+      .filter-bar { padding: 14px; gap: 10px; }
+      .filter-group { min-width: 47%; }
+      
+      .kpi-container { 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px; 
+      }
+      .kpi-card { padding: 14px; }
+      .kpi-value { font-size: 18px; }
+      
+      td, th { padding: 10px 12px; font-size: 13px; }
+      
+      .pagination-bar { flex-direction: column; align-items: center; gap: 10px; }
+    }
+
+    @media (max-width: 480px) {
+      .filter-group { min-width: 100%; }
+    }
+
+    /* --- COMPACT PDF PRINT & MULTI-PAGE STYLING --- */
     @media print {
-      body { background-color: #fff !important; color: #000 !important; padding: 0 !important; }
-      .header, .clock-card, .filter-bar, .report-generator-bar, .pagination-bar, .refresh-btn, .download-btn { display: none !important; }
-      .table-container { border: none !important; box-shadow: none !important; }
-      table { width: 100% !important; border-collapse: collapse !important; color: #000 !important; }
-      th { background-color: #f1f5f9 !important; color: #000 !important; border: 1px solid #ccc !important; }
-      td { border: 1px solid #ccc !important; color: #000 !important; }
-      .kpi-container { grid-template-columns: repeat(3, 1fr) !important; gap: 10px !important; }
-      .kpi-card { background: #f8fafc !important; border: 1px solid #ccc !important; color: #000 !important; }
-      .kpi-value, .kpi-label { color: #000 !important; }
+      @page {
+        size: A4 portrait;
+        margin: 12mm 10mm;
+      }
+
+      body { 
+        background-color: #ffffff !important; 
+        color: #0f172a !important; 
+        padding: 0 !important; 
+        font-size: 10px !important;
+      }
+
+      /* Hide interactive UI controls when downloading PDF */
+      .header, .clock-card, .filter-bar, .report-generator-bar, .pagination-bar, .refresh-btn, .download-btn { 
+        display: none !important; 
+      }
+
+      /* Print Report Title Header */
+      body::before {
+        content: "MalT Cash Flow Detailed Financial Report";
+        display: block;
+        font-size: 18px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 12px;
+        border-bottom: 2px solid #0f172a;
+        padding-bottom: 4px;
+      }
+
+      /* Compact KPI Cards for PDF */
+      .kpi-container { 
+        grid-template-columns: repeat(4, 1fr) !important; 
+        gap: 6px !important; 
+        margin-bottom: 12px !important; 
+      }
+      .kpi-card { 
+        background: #f8fafc !important; 
+        border: 1px solid #cbd5e1 !important; 
+        color: #0f172a !important; 
+        padding: 8px 10px !important;
+        border-radius: 6px !important;
+        box-shadow: none !important;
+      }
+      .kpi-card::before { display: none !important; }
+      .kpi-label { font-size: 9px !important; color: #475569 !important; margin-bottom: 2px !important; }
+      .kpi-value { font-size: 14px !important; color: #0f172a !important; }
+
+      /* Compact Multi-Page Table Setup */
+      .table-container { 
+        border: 1px solid #cbd5e1 !important; 
+        box-shadow: none !important; 
+        border-radius: 6px !important;
+        overflow: visible !important;
+      }
+      
+      table { 
+        width: 100% !important; 
+        border-collapse: collapse !important; 
+        color: #0f172a !important; 
+        min-width: 0 !important;
+      }
+
+      thead { display: table-header-group !important; } /* Repeats table headers on Page 2, Page 3, etc. */
+      tr { page-break-inside: avoid !important; page-break-after: auto !important; }
+
+      th { 
+        background-color: #f1f5f9 !important; 
+        color: #0f172a !important; 
+        border-bottom: 1px solid #94a3b8 !important; 
+        padding: 6px 8px !important;
+        font-size: 10px !important;
+      }
+
+      td { 
+        border-bottom: 1px solid #e2e8f0 !important; 
+        color: #0f172a !important; 
+        padding: 5px 8px !important;
+        font-size: 10px !important;
+      }
+
+      .badge {
+        padding: 2px 6px !important;
+        font-size: 9px !important;
+        border-radius: 4px !important;
+      }
+      .badge-income { background: #d1fae5 !important; color: #065f46 !important; border: none !important; }
+      .badge-expense { background: #ffe4e6 !important; color: #9f1239 !important; border: none !important; }
     }
   </style>
 </head>
@@ -285,9 +391,10 @@
     
     <div class="filter-group">
       <label for="report-type">Report Type</label>
-      <select id="report-type" class="filter-select" onchange="toggleReportSelector()">
+      <select id="report-type" class="filter-select">
         <option value="monthly">Monthly Report</option>
-        <option value="weekly">Weekly Report</option>
+        <option value="weekly">Weekly Report (This Week)</option>
+        <option value="all">Full Detailed Report (All Time)</option>
       </select>
     </div>
 
@@ -296,11 +403,6 @@
       <select id="report-month" class="filter-select">
         <!-- Dynamically populated -->
       </select>
-    </div>
-
-    <div class="filter-group" id="week-select-group" style="display: none;">
-      <label for="report-week">Select Date Range (Week)</label>
-      <input type="date" id="report-week-start" class="search-input">
     </div>
 
     <div class="filter-group" style="justify-content: flex-end;">
@@ -421,6 +523,7 @@
     let rawData = [];
     let currentPage = 1;
     const rowsPerPage = 10;
+    let isPrintingReport = false; // Bypasses 10-row pagination when exporting PDF
 
     // Real-Time Digital Clock (MYT)
     function updateMalaysiaClock() {
@@ -453,12 +556,6 @@
         return `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
       }
       return "Other";
-    }
-
-    function toggleReportSelector() {
-      const type = document.getElementById("report-type").value;
-      document.getElementById("month-select-group").style.display = type === "monthly" ? "flex" : "none";
-      document.getElementById("week-select-group").style.display = type === "weekly" ? "flex" : "none";
     }
 
     async function fetchData() {
@@ -502,16 +599,30 @@
 
     function generateAndDownloadReport() {
       const type = document.getElementById("report-type").value;
+      
       if (type === "monthly") {
         const selectedMonth = document.getElementById("report-month").value;
         document.getElementById("month-filter").value = selectedMonth;
         document.getElementById("timeframe-filter").value = "all";
-      } else {
+      } else if (type === "weekly") {
         document.getElementById("timeframe-filter").value = "weekly";
+        document.getElementById("month-filter").value = "all";
+      } else {
+        document.getElementById("timeframe-filter").value = "all";
+        document.getElementById("month-filter").value = "all";
       }
       
+      // Temporarily render ALL data without 10-row page limit for complete PDF
+      isPrintingReport = true;
       renderDashboard();
+      
       window.print();
+      
+      // Restore paginated dashboard after print prompt finishes
+      setTimeout(() => {
+        isPrintingReport = false;
+        renderDashboard();
+      }, 1000);
     }
 
     function resetPageAndRender() {
@@ -522,6 +633,28 @@
     function changePage(direction) {
       currentPage += direction;
       renderDashboard();
+    }
+
+    function matchesTimeframe(dateStr, timeframe) {
+      if (timeframe === "all") return true;
+      const date = parseDate(dateStr);
+      if (!date) return true;
+
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      if (timeframe === "today") {
+        return date >= today;
+      } else if (timeframe === "weekly") {
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay());
+        return date >= startOfWeek;
+      } else if (timeframe === "monthly") {
+        return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+      } else if (timeframe === "yearly") {
+        return date.getFullYear() === now.getFullYear();
+      }
+      return true;
     }
 
     function renderDashboard() {
@@ -556,14 +689,16 @@
         }
 
         const matchesMonth = monthFilter === "all" || getMonthKey(row.date) === monthFilter;
+        const matchesTime = matchesTimeframe(row.date, timeframeFilter);
         const matchesSearch = !searchQuery || 
           (row.description && row.description.toLowerCase().includes(searchQuery)) ||
           (row.business && row.business.toLowerCase().includes(searchQuery)) ||
           (row.paymentMethod && row.paymentMethod.toLowerCase().includes(searchQuery));
 
-        return matchesType && matchesBusiness && matchesMonth && matchesSearch;
+        return matchesType && matchesBusiness && matchesMonth && matchesTime && matchesSearch;
       });
 
+      // Sort newest date to top
       filtered.sort((a, b) => {
         const dateA = parseDate(a.date) || new Date(0);
         const dateB = parseDate(b.date) || new Date(0);
@@ -591,12 +726,13 @@
         }
       });
 
+      // Pagination slice calculation (bypassed if printing report)
       const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
       if (currentPage > totalPages) currentPage = totalPages;
       if (currentPage < 1) currentPage = 1;
 
-      const startIndex = (currentPage - 1) * rowsPerPage;
-      const endIndex = Math.min(startIndex + rowsPerPage, filtered.length);
+      const startIndex = isPrintingReport ? 0 : (currentPage - 1) * rowsPerPage;
+      const endIndex = isPrintingReport ? filtered.length : Math.min(startIndex + rowsPerPage, filtered.length);
       const pageData = filtered.slice(startIndex, endIndex);
 
       if (filtered.length === 0) {
