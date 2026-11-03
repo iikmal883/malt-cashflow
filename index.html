@@ -25,7 +25,6 @@
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
     .header-left { display: flex; align-items: center; gap: 16px; }
     
-    /* Custom Logo Styling */
     .custom-logo {
       height: 56px;
       width: auto;
@@ -57,7 +56,6 @@
       animation: purpleGlow 4s infinite alternate ease-in-out;
     }
 
-    /* Green Blinking Circle Indicator */
     .live-dot {
       width: 10px;
       height: 10px;
@@ -71,10 +69,10 @@
     .clock-label { font-size: 10px; color: #c084fc; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
 
     /* Glassmorphism Multi-Filter Bar */
-    .filter-bar { 
+    .filter-bar, .report-generator-bar { 
       display: flex; 
       gap: 12px; 
-      margin-bottom: 24px; 
+      margin-bottom: 20px; 
       flex-wrap: wrap; 
       background: #18142a; 
       padding: 18px; 
@@ -82,6 +80,17 @@
       border: 1px solid #2e2348;
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
+
+    .section-subtitle {
+      width: 100%;
+      font-size: 13px;
+      font-weight: 700;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+    }
+
     .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 140px; }
     .filter-group label { font-size: 11px; font-weight: 700; color: #a855f7; text-transform: uppercase; letter-spacing: 0.5px; }
     .filter-select, .search-input { 
@@ -127,7 +136,6 @@
       box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.25);
     }
 
-    /* Accent top borders for individual KPIs */
     .kpi-card.card-gross::before { background: linear-gradient(90deg, #10b981, #34d399); }
     .kpi-card.card-expense::before { background: linear-gradient(90deg, #f43f5e, #fb7185); }
     .kpi-card.card-net::before { background: linear-gradient(90deg, #c084fc, #38bdf8); }
@@ -164,7 +172,6 @@
     td { padding: 14px 16px; border-top: 1px solid #231b39; font-size: 14px; }
     tr:hover td { background: rgba(168, 85, 247, 0.04); }
 
-    /* Numbering Column Styling */
     .col-num { width: 50px; text-align: center; color: #94a3b8; font-weight: 700; }
 
     /* Neon Badges */
@@ -208,7 +215,7 @@
     }
 
     /* Button Styling */
-    .refresh-btn { 
+    .refresh-btn, .download-btn { 
       background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%); 
       color: #fff; 
       border: none; 
@@ -219,10 +226,12 @@
       transition: all 0.2s ease;
       box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
     }
-    .refresh-btn:hover { 
-      background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); 
+    .download-btn {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
+    .refresh-btn:hover, .download-btn:hover { 
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
     }
 
     /* Keyframe Animations */
@@ -237,32 +246,17 @@
       100% { border-color: rgba(168, 85, 247, 0.6); box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
     }
 
-    /* --- MOBILE RESPONSIVE MEDIA QUERIES --- */
-    @media (max-width: 768px) {
-      body { padding: 14px; }
-      .header { flex-direction: column; align-items: flex-start; gap: 14px; }
-      .header-left { width: 100%; }
-      .title { font-size: 20px; }
-      .custom-logo { height: 44px; }
-      .clock-card { width: 100%; justify-content: space-between; }
-      
-      .filter-bar { padding: 14px; gap: 10px; }
-      .filter-group { min-width: 47%; }
-      
-      .kpi-container { 
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 12px; 
-      }
-      .kpi-card { padding: 14px; }
-      .kpi-value { font-size: 18px; }
-      
-      td, th { padding: 10px 12px; font-size: 13px; }
-      
-      .pagination-bar { flex-direction: column; align-items: center; gap: 10px; }
-    }
-
-    @media (max-width: 480px) {
-      .filter-group { min-width: 100%; }
+    /* Print / Download Report PDF Layout */
+    @media print {
+      body { background-color: #fff !important; color: #000 !important; padding: 0 !important; }
+      .header, .clock-card, .filter-bar, .report-generator-bar, .pagination-bar, .refresh-btn, .download-btn { display: none !important; }
+      .table-container { border: none !important; box-shadow: none !important; }
+      table { width: 100% !important; border-collapse: collapse !important; color: #000 !important; }
+      th { background-color: #f1f5f9 !important; color: #000 !important; border: 1px solid #ccc !important; }
+      td { border: 1px solid #ccc !important; color: #000 !important; }
+      .kpi-container { grid-template-columns: repeat(3, 1fr) !important; gap: 10px !important; }
+      .kpi-card { background: #f8fafc !important; border: 1px solid #ccc !important; color: #000 !important; }
+      .kpi-value, .kpi-label { color: #000 !important; }
     }
   </style>
 </head>
@@ -285,7 +279,36 @@
     </div>
   </div>
 
-  <!-- Multi-Filter Bar -->
+  <!-- Downloadable Report Generator Panel -->
+  <div class="report-generator-bar">
+    <div class="section-subtitle">📄 Downloadable Detailed Report Generator</div>
+    
+    <div class="filter-group">
+      <label for="report-type">Report Type</label>
+      <select id="report-type" class="filter-select" onchange="toggleReportSelector()">
+        <option value="monthly">Monthly Report</option>
+        <option value="weekly">Weekly Report</option>
+      </select>
+    </div>
+
+    <div class="filter-group" id="month-select-group">
+      <label for="report-month">Select Specific Month</label>
+      <select id="report-month" class="filter-select">
+        <!-- Dynamically populated -->
+      </select>
+    </div>
+
+    <div class="filter-group" id="week-select-group" style="display: none;">
+      <label for="report-week">Select Date Range (Week)</label>
+      <input type="date" id="report-week-start" class="search-input">
+    </div>
+
+    <div class="filter-group" style="justify-content: flex-end;">
+      <button class="download-btn" onclick="generateAndDownloadReport()">⬇ Download PDF Report</button>
+    </div>
+  </div>
+
+  <!-- Dashboard Filter Bar -->
   <div class="filter-bar">
     <div class="filter-group">
       <label for="timeframe-filter">Time Period</label>
@@ -414,7 +437,6 @@
     setInterval(updateMalaysiaClock, 1000);
     updateMalaysiaClock();
 
-    // Enhanced Safe Date Parser
     function parseDate(dateStr) {
       if (!dateStr) return null;
       let cleanStr = String(dateStr).replace(' at ', ' ');
@@ -424,19 +446,21 @@
       return !isNaN(fallback.getTime()) ? fallback : null;
     }
 
-    // Extract Month-Year (e.g., "Nov 2026")
     function getMonthKey(dateStr) {
       const d = parseDate(dateStr);
       if (d) {
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         return `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
       }
-      const match = String(dateStr).match(/([A-Za-z]{3})\s+(\d{4})/);
-      if (match) return `${match[1]} ${match[2]}`;
       return "Other";
     }
 
-    // Fetch live JSON data from Apps Script
+    function toggleReportSelector() {
+      const type = document.getElementById("report-type").value;
+      document.getElementById("month-select-group").style.display = type === "monthly" ? "flex" : "none";
+      document.getElementById("week-select-group").style.display = type === "weekly" ? "flex" : "none";
+    }
+
     async function fetchData() {
       const tbody = document.getElementById("table-body");
       try {
@@ -446,14 +470,13 @@
         populateMonthDropdown();
         renderDashboard();
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#fb7185;">Error loading data. Verify your Apps Script URL.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#fb7185;">Error loading data. Verify Apps Script URL.</td></tr>`;
       }
     }
 
-    // Dynamically build month filter options
     function populateMonthDropdown() {
       const monthSelect = document.getElementById("month-filter");
-      const currentSelected = monthSelect.value;
+      const reportMonthSelect = document.getElementById("report-month");
       
       const monthsSet = new Set();
       rawData.forEach(row => {
@@ -462,39 +485,33 @@
       });
 
       monthSelect.innerHTML = `<option value="all">All Months</option>`;
+      reportMonthSelect.innerHTML = ``;
+
       monthsSet.forEach(month => {
         const option = document.createElement("option");
         option.value = month;
         option.textContent = month;
         monthSelect.appendChild(option);
-      });
 
-      if (Array.from(monthSelect.options).some(opt => opt.value === currentSelected)) {
-        monthSelect.value = currentSelected;
-      }
+        const repOpt = document.createElement("option");
+        repOpt.value = month;
+        repOpt.textContent = month;
+        reportMonthSelect.appendChild(repOpt);
+      });
     }
 
-    // Check timeframe filters (Today, Week, Month, Year)
-    function matchesTimeframe(dateStr, timeframe) {
-      if (timeframe === "all") return true;
-      const date = parseDate(dateStr);
-      if (!date) return true;
-
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-      if (timeframe === "today") {
-        return date >= today;
-      } else if (timeframe === "weekly") {
-        const startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay());
-        return date >= startOfWeek;
-      } else if (timeframe === "monthly") {
-        return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
-      } else if (timeframe === "yearly") {
-        return date.getFullYear() === now.getFullYear();
+    function generateAndDownloadReport() {
+      const type = document.getElementById("report-type").value;
+      if (type === "monthly") {
+        const selectedMonth = document.getElementById("report-month").value;
+        document.getElementById("month-filter").value = selectedMonth;
+        document.getElementById("timeframe-filter").value = "all";
+      } else {
+        document.getElementById("timeframe-filter").value = "weekly";
       }
-      return true;
+      
+      renderDashboard();
+      window.print();
     }
 
     function resetPageAndRender() {
@@ -507,7 +524,6 @@
       renderDashboard();
     }
 
-    // Main render, sort, math & pagination logic engine
     function renderDashboard() {
       const timeframeFilter = document.getElementById("timeframe-filter").value;
       const typeFilter = document.getElementById("type-filter").value.toLowerCase();
@@ -525,7 +541,6 @@
       let otherNet = 0;
       let count = 0;
 
-      // 1. Filter rows
       const filtered = rawData.filter(row => {
         const type = (row.type || "Income").toLowerCase();
         const matchesType = typeFilter === "all" || type === typeFilter;
@@ -541,23 +556,20 @@
         }
 
         const matchesMonth = monthFilter === "all" || getMonthKey(row.date) === monthFilter;
-        const matchesTime = matchesTimeframe(row.date, timeframeFilter);
         const matchesSearch = !searchQuery || 
           (row.description && row.description.toLowerCase().includes(searchQuery)) ||
           (row.business && row.business.toLowerCase().includes(searchQuery)) ||
           (row.paymentMethod && row.paymentMethod.toLowerCase().includes(searchQuery));
 
-        return matchesType && matchesBusiness && matchesMonth && matchesTime && matchesSearch;
+        return matchesType && matchesBusiness && matchesMonth && matchesSearch;
       });
 
-      // 2. Strict Date Sorting (Newest date first)
       filtered.sort((a, b) => {
         const dateA = parseDate(a.date) || new Date(0);
         const dateB = parseDate(b.date) || new Date(0);
         return dateB.getTime() - dateA.getTime();
       });
 
-      // 3. Compute KPI math across all filtered records
       filtered.forEach(row => {
         const amt = Number(row.amount) || 0;
         const isExpense = row.type && row.type.toLowerCase() === "expense";
@@ -579,7 +591,6 @@
         }
       });
 
-      // 4. Calculate Pagination Slices
       const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
       if (currentPage > totalPages) currentPage = totalPages;
       if (currentPage < 1) currentPage = 1;
@@ -588,12 +599,11 @@
       const endIndex = Math.min(startIndex + rowsPerPage, filtered.length);
       const pageData = filtered.slice(startIndex, endIndex);
 
-      // 5. Render 10 rows for current page with sequential numbers (1, 2, 3...)
       if (filtered.length === 0) {
         tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#c084fc;">No matching transactions found.</td></tr>`;
       } else {
         pageData.forEach((row, index) => {
-          const rowNumber = startIndex + index + 1; // 1, 2, 3...
+          const rowNumber = startIndex + index + 1;
           const amt = Number(row.amount) || 0;
           const isExpense = row.type && row.type.toLowerCase() === "expense";
           const badgeClass = isExpense ? "badge-expense" : "badge-income";
@@ -612,7 +622,6 @@
         });
       }
 
-      // 6. Update Pagination UI elements
       document.getElementById("btn-prev").disabled = currentPage === 1;
       document.getElementById("btn-next").disabled = currentPage === totalPages || filtered.length === 0;
       document.getElementById("page-current").innerText = `Page ${currentPage} of ${totalPages}`;
@@ -622,7 +631,6 @@
 
       const netTotal = grossIncome - totalExpenses;
 
-      // Update Dashboard KPIs
       document.getElementById("kpi-gross").innerText = `RM ${grossIncome.toFixed(2)}`;
       document.getElementById("kpi-expenses").innerText = `RM ${totalExpenses.toFixed(2)}`;
       
@@ -636,7 +644,6 @@
       document.getElementById("kpi-count").innerText = count;
     }
 
-    // Initial load & 10s auto-refresh
     fetchData();
     setInterval(fetchData, 10000);
   </script>
