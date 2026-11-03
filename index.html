@@ -169,7 +169,7 @@
       letter-spacing: 0.8px;
       border-bottom: 1px solid #2e2348;
     }
-    td { padding: 14px 16px; border-top: 1px solid #231b39; font-size: 14px; }
+    td { padding: 14px 16px; border-top: 1px solid #231b39; font-size: 14px; color: #f3e8ff; }
     tr:hover td { background: rgba(168, 85, 247, 0.04); }
 
     .col-num { width: 50px; text-align: center; color: #94a3b8; font-weight: 700; }
@@ -274,11 +274,11 @@
       .filter-group { min-width: 100%; }
     }
 
-    /* --- COMPACT PDF PRINT & MULTI-PAGE STYLING --- */
+    /* --- STRICT LIGHT PDF PRINT STYLING (FIXES INVISIBLE TEXT) --- */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 12mm 10mm;
+        margin: 12mm 8mm;
       }
 
       body { 
@@ -288,24 +288,24 @@
         font-size: 10px !important;
       }
 
-      /* Hide interactive UI controls when downloading PDF */
+      /* Hide interactive UI elements */
       .header, .clock-card, .filter-bar, .report-generator-bar, .pagination-bar, .refresh-btn, .download-btn { 
         display: none !important; 
       }
 
-      /* Print Report Title Header */
+      /* Report Header Title */
       body::before {
         content: "MalT Cash Flow Detailed Financial Report";
         display: block;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 800;
         color: #0f172a;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         border-bottom: 2px solid #0f172a;
         padding-bottom: 4px;
       }
 
-      /* Compact KPI Cards for PDF */
+      /* Compact KPI Cards */
       .kpi-container { 
         grid-template-columns: repeat(4, 1fr) !important; 
         gap: 6px !important; 
@@ -315,20 +315,21 @@
         background: #f8fafc !important; 
         border: 1px solid #cbd5e1 !important; 
         color: #0f172a !important; 
-        padding: 8px 10px !important;
-        border-radius: 6px !important;
+        padding: 6px 8px !important;
+        border-radius: 4px !important;
         box-shadow: none !important;
       }
       .kpi-card::before { display: none !important; }
-      .kpi-label { font-size: 9px !important; color: #475569 !important; margin-bottom: 2px !important; }
-      .kpi-value { font-size: 14px !important; color: #0f172a !important; }
+      .kpi-label { font-size: 8px !important; color: #475569 !important; margin-bottom: 2px !important; }
+      .kpi-value { font-size: 13px !important; color: #0f172a !important; }
 
-      /* Compact Multi-Page Table Setup */
+      /* Clear Printable Table */
       .table-container { 
         border: 1px solid #cbd5e1 !important; 
         box-shadow: none !important; 
-        border-radius: 6px !important;
+        border-radius: 4px !important;
         overflow: visible !important;
+        background: #ffffff !important;
       }
       
       table { 
@@ -338,23 +339,27 @@
         min-width: 0 !important;
       }
 
-      thead { display: table-header-group !important; } /* Repeats table headers on Page 2, Page 3, etc. */
+      thead { display: table-header-group !important; } /* Keeps Table Header on Page 2, Page 3, etc. */
       tr { page-break-inside: avoid !important; page-break-after: auto !important; }
 
       th { 
         background-color: #f1f5f9 !important; 
         color: #0f172a !important; 
-        border-bottom: 1px solid #94a3b8 !important; 
+        border-bottom: 2px solid #94a3b8 !important; 
         padding: 6px 8px !important;
         font-size: 10px !important;
+        font-weight: 800 !important;
       }
 
       td { 
+        background-color: #ffffff !important; /* Force white background for all rows */
+        color: #0f172a !important;            /* Force dark text for readability */
         border-bottom: 1px solid #e2e8f0 !important; 
-        color: #0f172a !important; 
         padding: 5px 8px !important;
         font-size: 10px !important;
       }
+
+      .col-num { color: #475569 !important; }
 
       .badge {
         padding: 2px 6px !important;
@@ -523,7 +528,7 @@
     let rawData = [];
     let currentPage = 1;
     const rowsPerPage = 10;
-    let isPrintingReport = false; // Bypasses 10-row pagination when exporting PDF
+    let isPrintingReport = false;
 
     // Real-Time Digital Clock (MYT)
     function updateMalaysiaClock() {
@@ -612,13 +617,11 @@
         document.getElementById("month-filter").value = "all";
       }
       
-      // Temporarily render ALL data without 10-row page limit for complete PDF
       isPrintingReport = true;
       renderDashboard();
       
       window.print();
       
-      // Restore paginated dashboard after print prompt finishes
       setTimeout(() => {
         isPrintingReport = false;
         renderDashboard();
@@ -698,7 +701,6 @@
         return matchesType && matchesBusiness && matchesMonth && matchesTime && matchesSearch;
       });
 
-      // Sort newest date to top
       filtered.sort((a, b) => {
         const dateA = parseDate(a.date) || new Date(0);
         const dateB = parseDate(b.date) || new Date(0);
@@ -726,7 +728,6 @@
         }
       });
 
-      // Pagination slice calculation (bypassed if printing report)
       const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
       if (currentPage > totalPages) currentPage = totalPages;
       if (currentPage < 1) currentPage = 1;
