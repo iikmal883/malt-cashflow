@@ -400,7 +400,7 @@
 </head>
 <body>
 
-  <!-- CENTERED PDF PRINT HEADER (Only renders during PDF Export) -->
+  <!-- CENTERED PDF PRINT HEADER -->
   <div class="print-header">
     <img src="https://i.postimg.cc/Vsjz1ksp/logo.png" alt="Ikmal Tech Solution Logo" class="print-logo">
     <div class="print-company-name">Ikmal Tech Solution</div>
@@ -706,9 +706,9 @@
 
       let grossIncome = 0;
       let totalExpenses = 0;
-      let printingNet = 0;
-      let laptopNet = 0;
-      let otherNet = 0;
+      let printingGross = 0;
+      let laptopGross = 0;
+      let otherGross = 0;
       let count = 0;
 
       const filtered = rawData.filter(row => {
@@ -750,15 +750,16 @@
           totalExpenses += amt;
         } else {
           grossIncome += amt;
-        }
-
-        const rowBiz = (row.business || "").toLowerCase();
-        if (rowBiz.includes("printing")) {
-          printingNet += isExpense ? -amt : amt;
-        } else if (rowBiz.includes("laptop")) {
-          laptopNet += isExpense ? -amt : amt;
-        } else {
-          otherNet += isExpense ? -amt : amt;
+          
+          // Pure Gross Income per category (matches spreadsheet behavior)
+          const rowBiz = (row.business || "").toLowerCase();
+          if (rowBiz.includes("printing")) {
+            printingGross += amt;
+          } else if (rowBiz.includes("laptop")) {
+            laptopGross += amt;
+          } else {
+            otherGross += amt;
+          }
         }
       });
 
@@ -809,9 +810,9 @@
       netKpiElem.innerText = `RM ${netTotal.toFixed(2)}`;
       netKpiElem.style.color = netTotal < 0 ? "#fb7185" : "#c084fc";
 
-      document.getElementById("kpi-printing").innerText = `RM ${printingNet.toFixed(2)}`;
-      document.getElementById("kpi-laptop").innerText = `RM ${laptopNet.toFixed(2)}`;
-      document.getElementById("kpi-other").innerText = `RM ${otherNet.toFixed(2)}`;
+      document.getElementById("kpi-printing").innerText = `RM ${printingGross.toFixed(2)}`;
+      document.getElementById("kpi-laptop").innerText = `RM ${laptopGross.toFixed(2)}`;
+      document.getElementById("kpi-other").innerText = `RM ${otherGross.toFixed(2)}`;
       document.getElementById("kpi-count").innerText = count;
     }
 
