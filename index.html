@@ -78,8 +78,21 @@
       flex-shrink: 0;
     }
 
-    /* Running Color Gradient & Glowing Title Animation */
-    .title { 
+    /* 2-Row Title Styling with Running Color Gradient & Glowing Animation */
+    .title-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .title-row-1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fae8ff;
+      letter-spacing: 0.3px;
+    }
+
+    .title-row-2 { 
       font-size: 26px; 
       font-weight: 900; 
       background: linear-gradient(270deg, #38bdf8, #e879f9, #c084fc, #38bdf8);
@@ -169,7 +182,7 @@
     }
 
     .toggle-arrow {
-      font-size: 14px;
+      font-size: 13px;
       color: #e879f9;
       transition: transform 0.3s ease;
       font-weight: bold;
@@ -369,7 +382,8 @@
       body { padding: 14px; }
       .header { flex-direction: column; align-items: flex-start; gap: 14px; }
       .header-left { width: 100%; }
-      .title { font-size: 20px; line-height: 1.3; }
+      .title-row-1 { font-size: 18px; }
+      .title-row-2 { font-size: 22px; }
       .custom-logo { height: 75px; max-width: 220px; }
       .clock-card { width: 100%; justify-content: space-between; }
       
@@ -524,7 +538,10 @@
   <div class="header">
     <div class="header-left">
       <img src="https://i.ibb.co/xSrJcPQp/transparent-malt.png" alt="Ikmal Tech Solution Logo" class="custom-logo" onerror="this.style.display='none'">
-      <h1 class="title">Ikmal Tech Solution Cash Flow Live Dashboard</h1>
+      <div class="title-wrapper">
+        <div class="title-row-1">Ikmal Tech Solution</div>
+        <div class="title-row-2">Cashflow Live Dashboard</div>
+      </div>
     </div>
 
     <!-- Cyber Clock & Live Status -->
@@ -542,7 +559,7 @@
   <div class="unified-control-panel">
     <div class="panel-header-toggle" onclick="toggleControlPanel()">
       <div class="section-subtitle">⚙️ Dashboard Filters & PDF Report Generator</div>
-      <div class="toggle-arrow" id="toggle-arrow-icon">▲ [Sembunyikan]</div>
+      <div class="toggle-arrow" id="toggle-arrow-icon">▲ [Hide Filters]</div>
     </div>
     
     <div class="control-content" id="control-content-box">
@@ -690,16 +707,16 @@
     const rowsPerPage = 10;
     let isPrintingReport = false;
 
-    // Toggle Dropdown for Control Panel
+    // Toggle Dropdown for Control Panel (English translation update)
     function toggleControlPanel() {
       const contentBox = document.getElementById("control-content-box");
       const arrowIcon = document.getElementById("toggle-arrow-icon");
       if (contentBox.classList.contains("collapsed")) {
         contentBox.classList.remove("collapsed");
-        arrowIcon.innerText = "▲ [Sembunyikan]";
+        arrowIcon.innerText = "▲ [Hide Filters]";
       } else {
         contentBox.classList.add("collapsed");
-        arrowIcon.innerText = "▼ [Buka Penapis]";
+        arrowIcon.innerText = "▼ [Show Filters]";
       }
     }
 
@@ -943,7 +960,6 @@
 
       const netTotal = grossIncome - totalExpenses;
 
-      document.getElementById("kpr-gross").innerText = `RM ${grossIncome.toFixed(2)}`;
       document.getElementById("kpi-gross").innerText = `RM ${grossIncome.toFixed(2)}`;
       document.getElementById("kpi-expenses").innerText = `RM ${totalExpenses.toFixed(2)}`;
       
