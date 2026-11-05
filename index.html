@@ -78,30 +78,31 @@
       flex-shrink: 0;
     }
 
-    /* 2-Row Title Styling with Running Color Gradient & Glowing Animation */
+    /* 2-Row Title Styling with Running Color Gradient & Glowing Animation on Both Rows */
     .title-wrapper {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
 
-    .title-row-1 {
-      font-size: 22px;
-      font-weight: 800;
-      color: #fae8ff;
-      letter-spacing: 0.3px;
-    }
-
-    .title-row-2 { 
-      font-size: 26px; 
+    .title-row-1, .title-row-2 { 
       font-weight: 900; 
       background: linear-gradient(270deg, #38bdf8, #e879f9, #c084fc, #38bdf8);
       background-size: 300% 300%;
       -webkit-background-clip: text; 
       -webkit-text-fill-color: transparent; 
-      letter-spacing: -0.5px;
       display: inline-block;
       animation: colorShiftRunning 6s ease infinite, neonGlowPulse 2.5s infinite alternate ease-in-out;
+    }
+
+    .title-row-1 {
+      font-size: 22px;
+      letter-spacing: 0.3px;
+    }
+
+    .title-row-2 {
+      font-size: 26px;
+      letter-spacing: -0.5px;
     }
 
     @keyframes colorShiftRunning {
@@ -707,7 +708,7 @@
     const rowsPerPage = 10;
     let isPrintingReport = false;
 
-    // Toggle Dropdown for Control Panel (English translation update)
+    // Toggle Dropdown for Control Panel
     function toggleControlPanel() {
       const contentBox = document.getElementById("control-content-box");
       const arrowIcon = document.getElementById("toggle-arrow-icon");
