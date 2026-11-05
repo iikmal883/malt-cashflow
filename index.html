@@ -75,7 +75,7 @@
     .clock-time { font-size: 17px; font-weight: 700; color: #fae8ff; font-family: monospace; }
     .clock-label { font-size: 10px; color: #e879f9; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
 
-    /* Unified Control Panel (Combined PDF Report & Dashboard Filter Bar) */
+    /* Unified Single-Box Control Panel */
     .unified-control-panel {
       background: #15092a;
       padding: 22px;
@@ -85,19 +85,14 @@
       margin-bottom: 24px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
     }
 
-    .control-section {
+    .control-row {
       display: flex;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
       align-items: flex-end;
-    }
-
-    .control-divider {
-      height: 1px;
-      background: rgba(217, 70, 239, 0.25);
       width: 100%;
     }
 
@@ -111,10 +106,12 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      margin-bottom: -2px;
     }
 
-    .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 150px; }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 140px; }
     .filter-group label { font-size: 11px; font-weight: 700; color: #d946ef; text-transform: uppercase; letter-spacing: 0.5px; }
+    
     .filter-select, .search-input { 
       background: #080312; 
       color: #fae8ff; 
@@ -124,6 +121,7 @@
       font-size: 14px; 
       outline: none; 
       transition: all 0.2s ease;
+      width: 100%;
     }
     .filter-select:focus, .search-input:focus { 
       border-color: #e879f9; 
@@ -283,7 +281,7 @@
       .custom-logo { height: 56px; }
       .clock-card { width: 100%; justify-content: space-between; }
       
-      .unified-control-panel { padding: 14px; gap: 14px; }
+      .unified-control-panel { padding: 14px; gap: 12px; }
       .filter-group { min-width: 47%; }
       
       .kpi-container { 
@@ -446,12 +444,12 @@
     </div>
   </div>
 
-  <!-- UNIFIED CONTROL PANEL: REPORT GENERATOR & FILTERS COMBINED -->
+  <!-- UNIFIED SINGLE-BOX CONTROL PANEL (ALL FILTERS & PDF CONTROLS IN ONE ROW/BOX) -->
   <div class="unified-control-panel">
-    <!-- PDF Report Generator Section -->
-    <div class="control-section">
-      <div class="section-subtitle">📄 Downloadable Detailed Report Generator</div>
-      
+    <div class="section-subtitle">⚙️ Dashboard Filters & PDF Report Generator</div>
+    
+    <div class="control-row">
+      <!-- Report Type -->
       <div class="filter-group">
         <label for="report-type">Report Type</label>
         <select id="report-type" class="filter-select">
@@ -461,24 +459,15 @@
         </select>
       </div>
 
+      <!-- Select Specific Month -->
       <div class="filter-group" id="month-select-group">
-        <label for="report-month">Select Specific Month</label>
+        <label for="report-month">Select Month</label>
         <select id="report-month" class="filter-select">
           <!-- Dynamically populated -->
         </select>
       </div>
 
-      <div class="filter-group" style="justify-content: flex-end; flex: 0 0 auto;">
-        <button class="download-btn" onclick="generateAndDownloadReport()">⬇ Download PDF Report</button>
-      </div>
-    </div>
-
-    <div class="control-divider"></div>
-
-    <!-- Dashboard Filter Bar Section -->
-    <div class="control-section">
-      <div class="section-subtitle">🔍 Interactive Dashboard Filters</div>
-
+      <!-- Time Period -->
       <div class="filter-group">
         <label for="timeframe-filter">Time Period</label>
         <select id="timeframe-filter" class="filter-select" onchange="resetPageAndRender()">
@@ -490,6 +479,7 @@
         </select>
       </div>
 
+      <!-- Type -->
       <div class="filter-group">
         <label for="type-filter">Type</label>
         <select id="type-filter" class="filter-select" onchange="resetPageAndRender()">
@@ -499,6 +489,7 @@
         </select>
       </div>
 
+      <!-- Business -->
       <div class="filter-group">
         <label for="business-filter">Business</label>
         <select id="business-filter" class="filter-select" onchange="resetPageAndRender()">
@@ -509,6 +500,7 @@
         </select>
       </div>
 
+      <!-- Filter Month -->
       <div class="filter-group">
         <label for="month-filter">Filter Month</label>
         <select id="month-filter" class="filter-select" onchange="resetPageAndRender()">
@@ -516,9 +508,15 @@
         </select>
       </div>
 
-      <div class="filter-group">
+      <!-- Search Description -->
+      <div class="filter-group" style="flex: 1.5;">
         <label for="search-input">Search Description</label>
         <input type="text" id="search-input" class="search-input" placeholder="Search item, method..." oninput="resetPageAndRender()">
+      </div>
+
+      <!-- Download Button -->
+      <div class="filter-group" style="flex: 0 0 auto; justify-content: flex-end;">
+        <button class="download-btn" onclick="generateAndDownloadReport()">⬇ Download PDF</button>
       </div>
     </div>
   </div>
