@@ -67,20 +67,20 @@
 
     /* Header & Navigation */
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; position: relative; z-index: 2; }
-    .header-left { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .header-left { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
     
     .custom-logo {
-      height: 72px;
+      height: 90px;
       width: auto;
-      max-width: 240px;
+      max-width: 280px;
       object-fit: contain;
-      filter: drop-shadow(0 0 10px rgba(217, 70, 239, 0.6));
+      filter: drop-shadow(0 0 12px rgba(217, 70, 239, 0.7));
       flex-shrink: 0;
     }
 
     /* Running Color Gradient & Glowing Title Animation */
     .title { 
-      font-size: 28px; 
+      font-size: 26px; 
       font-weight: 900; 
       background: linear-gradient(270deg, #38bdf8, #e879f9, #c084fc, #38bdf8);
       background-size: 300% 300%;
@@ -134,10 +134,10 @@
     .clock-time { font-size: 17px; font-weight: 700; color: #fae8ff; font-family: monospace; }
     .clock-label { font-size: 10px; color: #e879f9; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
 
-    /* Unified Single-Box Control Panel */
+    /* Unified Single-Box Control Panel with Dropdown Toggle */
     .unified-control-panel {
       background: #15092a;
-      padding: 22px;
+      padding: 20px 22px;
       border-radius: 18px;
       border: 1px solid rgba(217, 70, 239, 0.4);
       box-shadow: 0 8px 32px 0 rgba(147, 51, 234, 0.25);
@@ -149,16 +149,15 @@
       z-index: 2;
     }
 
-    .control-row {
+    .panel-header-toggle {
       display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: flex-end;
-      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
     }
 
     .section-subtitle {
-      width: 100%;
       font-size: 12px;
       font-weight: 800;
       color: #e879f9;
@@ -167,7 +166,33 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: -2px;
+    }
+
+    .toggle-arrow {
+      font-size: 14px;
+      color: #e879f9;
+      transition: transform 0.3s ease;
+      font-weight: bold;
+    }
+
+    .control-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .control-content.collapsed {
+      display: none;
+    }
+
+    .control-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      width: 100%;
     }
 
     .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 140px; }
@@ -344,8 +369,8 @@
       body { padding: 14px; }
       .header { flex-direction: column; align-items: flex-start; gap: 14px; }
       .header-left { width: 100%; }
-      .title { font-size: 22px; }
-      .custom-logo { height: 56px; }
+      .title { font-size: 20px; line-height: 1.3; }
+      .custom-logo { height: 75px; max-width: 220px; }
       .clock-card { width: 100%; justify-content: space-between; }
       
       .unified-control-panel { padding: 14px; gap: 12px; }
@@ -513,79 +538,84 @@
     </div>
   </div>
 
-  <!-- UNIFIED SINGLE-BOX CONTROL PANEL (ALL FILTERS & PDF CONTROLS IN ONE ROW/BOX) -->
+  <!-- UNIFIED CONTROL PANEL WITH TOGGLE DROPDOWN FUNCTION -->
   <div class="unified-control-panel">
-    <div class="section-subtitle">⚙️ Dashboard Filters & PDF Report Generator</div>
+    <div class="panel-header-toggle" onclick="toggleControlPanel()">
+      <div class="section-subtitle">⚙️ Dashboard Filters & PDF Report Generator</div>
+      <div class="toggle-arrow" id="toggle-arrow-icon">▲ [Sembunyikan]</div>
+    </div>
     
-    <div class="control-row">
-      <!-- Report Type -->
-      <div class="filter-group">
-        <label for="report-type">Report Type</label>
-        <select id="report-type" class="filter-select">
-          <option value="monthly">Monthly Report</option>
-          <option value="weekly">Weekly Report (This Week)</option>
-          <option value="all">Full Detailed Report (All Time)</option>
-        </select>
-      </div>
+    <div class="control-content" id="control-content-box">
+      <div class="control-row">
+        <!-- Report Type -->
+        <div class="filter-group">
+          <label for="report-type">Report Type</label>
+          <select id="report-type" class="filter-select">
+            <option value="monthly">Monthly Report</option>
+            <option value="weekly">Weekly Report (This Week)</option>
+            <option value="all">Full Detailed Report (All Time)</option>
+          </select>
+        </div>
 
-      <!-- Select Specific Month -->
-      <div class="filter-group" id="month-select-group">
-        <label for="report-month">Select Month</label>
-        <select id="report-month" class="filter-select">
-          <!-- Dynamically populated -->
-        </select>
-      </div>
+        <!-- Select Specific Month -->
+        <div class="filter-group" id="month-select-group">
+          <label for="report-month">Select Month</label>
+          <select id="report-month" class="filter-select">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
 
-      <!-- Time Period -->
-      <div class="filter-group">
-        <label for="timeframe-filter">Time Period</label>
-        <select id="timeframe-filter" class="filter-select" onchange="resetPageAndRender()">
-          <option value="all">All Time</option>
-          <option value="today">Today</option>
-          <option value="weekly">This Week</option>
-          <option value="monthly">This Month</option>
-          <option value="yearly">This Year</option>
-        </select>
-      </div>
+        <!-- Time Period -->
+        <div class="filter-group">
+          <label for="timeframe-filter">Time Period</label>
+          <select id="timeframe-filter" class="filter-select" onchange="resetPageAndRender()">
+            <option value="all">All Time</option>
+            <option value="today">Today</option>
+            <option value="weekly">This Week</option>
+            <option value="monthly">This Month</option>
+            <option value="yearly">This Year</option>
+          </select>
+        </div>
 
-      <!-- Type -->
-      <div class="filter-group">
-        <label for="type-filter">Type</label>
-        <select id="type-filter" class="filter-select" onchange="resetPageAndRender()">
-          <option value="all">Income & Expense</option>
-          <option value="income">Income Only</option>
-          <option value="expense">Expense Only</option>
-        </select>
-      </div>
+        <!-- Type -->
+        <div class="filter-group">
+          <label for="type-filter">Type</label>
+          <select id="type-filter" class="filter-select" onchange="resetPageAndRender()">
+            <option value="all">Income & Expense</option>
+            <option value="income">Income Only</option>
+            <option value="expense">Expense Only</option>
+          </select>
+        </div>
 
-      <!-- Business -->
-      <div class="filter-group">
-        <label for="business-filter">Business</label>
-        <select id="business-filter" class="filter-select" onchange="resetPageAndRender()">
-          <option value="all">All Businesses</option>
-          <option value="printing">Printing Service</option>
-          <option value="laptop">Laptop Service</option>
-          <option value="other">Other Business</option>
-        </select>
-      </div>
+        <!-- Business -->
+        <div class="filter-group">
+          <label for="business-filter">Business</label>
+          <select id="business-filter" class="filter-select" onchange="resetPageAndRender()">
+            <option value="all">All Businesses</option>
+            <option value="printing">Printing Service</option>
+            <option value="laptop">Laptop Service</option>
+            <option value="other">Other Business</option>
+          </select>
+        </div>
 
-      <!-- Filter Month -->
-      <div class="filter-group">
-        <label for="month-filter">Filter Month</label>
-        <select id="month-filter" class="filter-select" onchange="resetPageAndRender()">
-          <option value="all">All Months</option>
-        </select>
-      </div>
+        <!-- Filter Month -->
+        <div class="filter-group">
+          <label for="month-filter">Filter Month</label>
+          <select id="month-filter" class="filter-select" onchange="resetPageAndRender()">
+            <option value="all">All Months</option>
+          </select>
+        </div>
 
-      <!-- Search Description -->
-      <div class="filter-group" style="flex: 1.5;">
-        <label for="search-input">Search Description</label>
-        <input type="text" id="search-input" class="search-input" placeholder="Search item, method..." oninput="resetPageAndRender()">
-      </div>
+        <!-- Search Description -->
+        <div class="filter-group" style="flex: 1.5;">
+          <label for="search-input">Search Description</label>
+          <input type="text" id="search-input" class="search-input" placeholder="Search item, method..." oninput="resetPageAndRender()">
+        </div>
 
-      <!-- Download Button -->
-      <div class="filter-group" style="flex: 0 0 auto; justify-content: flex-end;">
-        <button class="download-btn" onclick="generateAndDownloadReport()">⬇ Download PDF</button>
+        <!-- Download Button -->
+        <div class="filter-group" style="flex: 0 0 auto; justify-content: flex-end;">
+          <button class="download-btn" onclick="generateAndDownloadReport()">⬇ Download PDF</button>
+        </div>
       </div>
     </div>
   </div>
@@ -659,6 +689,19 @@
     let currentPage = 1;
     const rowsPerPage = 10;
     let isPrintingReport = false;
+
+    // Toggle Dropdown for Control Panel
+    function toggleControlPanel() {
+      const contentBox = document.getElementById("control-content-box");
+      const arrowIcon = document.getElementById("toggle-arrow-icon");
+      if (contentBox.classList.contains("collapsed")) {
+        contentBox.classList.remove("collapsed");
+        arrowIcon.innerText = "▲ [Sembunyikan]";
+      } else {
+        contentBox.classList.add("collapsed");
+        arrowIcon.innerText = "▼ [Buka Penapis]";
+      }
+    }
 
     // Real-Time Digital Clock (MYT)
     function updateMalaysiaClock() {
@@ -900,6 +943,7 @@
 
       const netTotal = grossIncome - totalExpenses;
 
+      document.getElementById("kpr-gross").innerText = `RM ${grossIncome.toFixed(2)}`;
       document.getElementById("kpi-gross").innerText = `RM ${grossIncome.toFixed(2)}`;
       document.getElementById("kpi-expenses").innerText = `RM ${totalExpenses.toFixed(2)}`;
       
