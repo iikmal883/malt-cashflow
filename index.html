@@ -7,39 +7,40 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     
-    /* Deep Cyber-Purple Theme Base */
+    /* Vibrant Neon Purple Theme Base */
     body { 
-      background-color: #0d0b18; 
-      color: #f3e8ff; 
+      background-color: #080312; 
+      color: #fae8ff; 
       padding: 24px;
       min-height: 100vh;
     }
     
-    /* Custom Scrollbar */
+    /* Custom Neon Scrollbar */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #0d0b18; }
-    ::-webkit-scrollbar-thumb { background: #3b0764; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #7e22ce; }
+    ::-webkit-scrollbar-track { background: #080312; }
+    ::-webkit-scrollbar-thumb { background: #9333ea; border-radius: 4px; box-shadow: 0 0 10px #c084fc; }
+    ::-webkit-scrollbar-thumb:hover { background: #c084fc; }
 
     /* Header & Navigation */
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
     .header-left { display: flex; align-items: center; gap: 16px; }
     
     .custom-logo {
-      height: 56px;
+      height: 72px;
       width: auto;
-      max-width: 200px;
+      max-width: 240px;
       object-fit: contain;
-      border-radius: 8px;
+      filter: drop-shadow(0 0 10px rgba(217, 70, 239, 0.6));
     }
 
     .title { 
-      font-size: 26px; 
-      font-weight: 800; 
-      background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #38bdf8 100%); 
+      font-size: 28px; 
+      font-weight: 900; 
+      background: linear-gradient(135deg, #e879f9 0%, #c084fc 50%, #38bdf8 100%); 
       -webkit-background-clip: text; 
       -webkit-text-fill-color: transparent; 
       letter-spacing: -0.5px;
+      filter: drop-shadow(0 0 15px rgba(217, 70, 239, 0.4));
     }
 
     /* Print Only Branding Header (Hidden on Web Screen) */
@@ -47,18 +48,18 @@
       display: none;
     }
 
-    /* Animated Cyber Clock Badge */
+    /* Animated Neon Clock Badge */
     .clock-card { 
-      background: rgba(24, 20, 42, 0.7); 
+      background: rgba(26, 11, 46, 0.85); 
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(168, 85, 247, 0.3); 
+      border: 1px solid rgba(217, 70, 239, 0.5); 
       padding: 10px 18px; 
       border-radius: 14px; 
       display: flex; 
       align-items: center; 
       gap: 14px;
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
-      animation: purpleGlow 4s infinite alternate ease-in-out;
+      box-shadow: 0 0 20px rgba(217, 70, 239, 0.3);
+      animation: neonPulseGlow 3s infinite alternate ease-in-out;
     }
 
     .live-dot {
@@ -67,41 +68,57 @@
       background-color: #10b981;
       border-radius: 50%;
       display: inline-block;
+      box-shadow: 0 0 10px #10b981;
       animation: pulseGreen 1.5s infinite ease-in-out;
     }
     
-    .clock-time { font-size: 17px; font-weight: 700; color: #f3e8ff; font-family: monospace; }
-    .clock-label { font-size: 10px; color: #c084fc; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+    .clock-time { font-size: 17px; font-weight: 700; color: #fae8ff; font-family: monospace; }
+    .clock-label { font-size: 10px; color: #e879f9; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
 
-    /* Glassmorphism Multi-Filter Bar */
-    .filter-bar, .report-generator-bar { 
-      display: flex; 
-      gap: 12px; 
-      margin-bottom: 20px; 
-      flex-wrap: wrap; 
-      background: #18142a; 
-      padding: 18px; 
-      border-radius: 16px; 
-      border: 1px solid #2e2348;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    /* Unified Control Panel (Combined PDF Report & Dashboard Filter Bar) */
+    .unified-control-panel {
+      background: #15092a;
+      padding: 22px;
+      border-radius: 18px;
+      border: 1px solid rgba(217, 70, 239, 0.4);
+      box-shadow: 0 8px 32px 0 rgba(147, 51, 234, 0.25);
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .control-section {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
+    .control-divider {
+      height: 1px;
+      background: rgba(217, 70, 239, 0.25);
+      width: 100%;
     }
 
     .section-subtitle {
       width: 100%;
-      font-size: 13px;
-      font-weight: 700;
-      color: #38bdf8;
+      font-size: 12px;
+      font-weight: 800;
+      color: #e879f9;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 4px;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 140px; }
-    .filter-group label { font-size: 11px; font-weight: 700; color: #a855f7; text-transform: uppercase; letter-spacing: 0.5px; }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 150px; }
+    .filter-group label { font-size: 11px; font-weight: 700; color: #d946ef; text-transform: uppercase; letter-spacing: 0.5px; }
     .filter-select, .search-input { 
-      background: #0d0b18; 
-      color: #f3e8ff; 
-      border: 1px solid #3b2d59; 
+      background: #080312; 
+      color: #fae8ff; 
+      border: 1px solid rgba(217, 70, 239, 0.4); 
       padding: 10px 14px; 
       border-radius: 10px; 
       font-size: 14px; 
@@ -109,8 +126,8 @@
       transition: all 0.2s ease;
     }
     .filter-select:focus, .search-input:focus { 
-      border-color: #a855f7; 
-      box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+      border-color: #e879f9; 
+      box-shadow: 0 0 12px rgba(217, 70, 239, 0.6);
     }
 
     /* Futuristic KPI Cards Grid */
@@ -121,10 +138,10 @@
       margin-bottom: 24px; 
     }
     .kpi-card { 
-      background: #18142a; 
+      background: #15092a; 
       padding: 18px; 
       border-radius: 16px; 
-      border: 1px solid #2e2348; 
+      border: 1px solid rgba(217, 70, 239, 0.3); 
       position: relative;
       overflow: hidden;
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -133,76 +150,77 @@
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, #a855f7, #c084fc);
+      background: linear-gradient(90deg, #d946ef, #e879f9);
     }
     .kpi-card:hover {
       transform: translateY(-4px);
-      border-color: #a855f7;
-      box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.25);
+      border-color: #e879f9;
+      box-shadow: 0 10px 25px -5px rgba(217, 70, 239, 0.35);
     }
 
     .kpi-card.card-gross::before { background: linear-gradient(90deg, #10b981, #34d399); }
     .kpi-card.card-expense::before { background: linear-gradient(90deg, #f43f5e, #fb7185); }
-    .kpi-card.card-net::before { background: linear-gradient(90deg, #c084fc, #38bdf8); }
+    .kpi-card.card-net::before { background: linear-gradient(90deg, #d946ef, #38bdf8); }
     .kpi-card.card-printing::before { background: linear-gradient(90deg, #818cf8, #a78bfa); }
     .kpi-card.card-laptop::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
     .kpi-card.card-other::before { background: linear-gradient(90deg, #ec4899, #f472b6); }
 
-    .kpi-label { font-size: 11px; color: #94a3b8; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    .kpi-value { font-size: 22px; font-weight: 800; color: #f3e8ff; }
+    .kpi-label { font-size: 11px; color: #cbd5e1; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .kpi-value { font-size: 22px; font-weight: 800; color: #fae8ff; }
     
     .text-income { color: #34d399; }
     .text-expense { color: #fb7185; }
-    .text-net { color: #c084fc; }
+    .text-net { color: #e879f9; }
 
-    /* Modern Dark Table */
+    /* Modern Neon Dark Table */
     .table-container { 
-      background: #18142a; 
+      background: #15092a; 
       border-radius: 16px; 
-      border: 1px solid #2e2348; 
+      border: 1px solid rgba(217, 70, 239, 0.4); 
       overflow-x: auto; 
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      box-shadow: 0 8px 32px 0 rgba(147, 51, 234, 0.25);
       margin-bottom: 16px;
     }
     table { width: 100%; border-collapse: collapse; text-align: left; min-width: 650px; }
     th { 
-      background: #120e22; 
-      color: #c084fc; 
+      background: #0f0520; 
+      color: #e879f9; 
       padding: 16px; 
       font-size: 12px; 
       text-transform: uppercase; 
       letter-spacing: 0.8px;
-      border-bottom: 1px solid #2e2348;
+      border-bottom: 1px solid rgba(217, 70, 239, 0.3);
     }
-    td { padding: 14px 16px; border-top: 1px solid #231b39; font-size: 14px; color: #f3e8ff; }
-    tr:hover td { background: rgba(168, 85, 247, 0.04); }
+    td { padding: 14px 16px; border-top: 1px solid rgba(217, 70, 239, 0.15); font-size: 14px; color: #fae8ff; }
+    tr:hover td { background: rgba(217, 70, 239, 0.08); }
 
-    .col-num { width: 50px; text-align: center; color: #94a3b8; font-weight: 700; }
+    .col-num { width: 60px; text-align: center; color: #e879f9; font-weight: 800; }
 
     /* Neon Badges */
     .badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
-    .badge-income { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .badge-expense { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+    .badge-income { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); box-shadow: 0 0 8px rgba(16, 185, 129, 0.2); }
+    .badge-expense { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); box-shadow: 0 0 8px rgba(244, 63, 94, 0.2); }
 
     /* Pagination Bar */
     .pagination-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #18142a;
+      background: #15092a;
       padding: 14px 20px;
       border-radius: 14px;
-      border: 1px solid #2e2348;
+      border: 1px solid rgba(217, 70, 239, 0.4);
       flex-wrap: wrap;
       gap: 12px;
+      box-shadow: 0 4px 20px rgba(147, 51, 234, 0.15);
     }
-    .page-info { font-size: 13px; color: #c084fc; font-weight: 600; }
+    .page-info { font-size: 13px; color: #e879f9; font-weight: 600; }
     .page-controls { display: flex; gap: 8px; align-items: center; }
     
     .page-btn {
-      background: #0d0b18;
-      color: #f3e8ff;
-      border: 1px solid #3b2d59;
+      background: #080312;
+      color: #fae8ff;
+      border: 1px solid rgba(217, 70, 239, 0.4);
       padding: 8px 16px;
       border-radius: 8px;
       cursor: pointer;
@@ -211,8 +229,9 @@
       transition: all 0.2s ease;
     }
     .page-btn:hover:not(:disabled) {
-      border-color: #a855f7;
-      background: #3b0764;
+      border-color: #e879f9;
+      background: #9333ea;
+      box-shadow: 0 0 10px #d946ef;
     }
     .page-btn:disabled {
       opacity: 0.4;
@@ -221,7 +240,7 @@
 
     /* Button Styling */
     .refresh-btn, .download-btn { 
-      background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%); 
+      background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); 
       color: #fff; 
       border: none; 
       padding: 10px 20px; 
@@ -229,14 +248,18 @@
       cursor: pointer; 
       font-weight: 700; 
       transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
     }
     .download-btn {
-      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      box-shadow: 0 0 15px rgba(14, 165, 233, 0.5);
+      height: 42px;
+      white-space: nowrap;
     }
     .refresh-btn:hover, .download-btn:hover { 
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      filter: brightness(1.15);
+      box-shadow: 0 0 20px rgba(217, 70, 239, 0.8);
     }
 
     /* Keyframe Animations */
@@ -246,9 +269,9 @@
       100% { transform: scale(0.9); opacity: 0.4; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
 
-    @keyframes purpleGlow {
-      0% { border-color: rgba(168, 85, 247, 0.2); box-shadow: 0 0 10px rgba(168, 85, 247, 0.1); }
-      100% { border-color: rgba(168, 85, 247, 0.6); box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
+    @keyframes neonPulseGlow {
+      0% { border-color: rgba(217, 70, 239, 0.3); box-shadow: 0 0 10px rgba(217, 70, 239, 0.2); }
+      100% { border-color: rgba(232, 121, 249, 0.8); box-shadow: 0 0 25px rgba(217, 70, 239, 0.6); }
     }
 
     /* --- MOBILE RESPONSIVE MEDIA QUERIES --- */
@@ -256,11 +279,11 @@
       body { padding: 14px; }
       .header { flex-direction: column; align-items: flex-start; gap: 14px; }
       .header-left { width: 100%; }
-      .title { font-size: 20px; }
-      .custom-logo { height: 44px; }
+      .title { font-size: 22px; }
+      .custom-logo { height: 56px; }
       .clock-card { width: 100%; justify-content: space-between; }
       
-      .filter-bar { padding: 14px; gap: 10px; }
+      .unified-control-panel { padding: 14px; gap: 14px; }
       .filter-group { min-width: 47%; }
       
       .kpi-container { 
@@ -271,7 +294,6 @@
       .kpi-value { font-size: 18px; }
       
       td, th { padding: 10px 12px; font-size: 13px; }
-      
       .pagination-bar { flex-direction: column; align-items: center; gap: 10px; }
     }
 
@@ -294,7 +316,7 @@
       }
 
       /* Hide interactive web controls */
-      .header, .clock-card, .filter-bar, .report-generator-bar, .pagination-bar, .refresh-btn, .download-btn { 
+      .header, .clock-card, .unified-control-panel, .pagination-bar, .refresh-btn, .download-btn { 
         display: none !important; 
       }
 
@@ -393,8 +415,8 @@
         font-size: 9px !important;
         border-radius: 4px !important;
       }
-      .badge-income { background: #d1fae5 !important; color: #065f46 !important; border: none !important; }
-      .badge-expense { background: #ffe4e6 !important; color: #9f1239 !important; border: none !important; }
+      .badge-income { background: #d1fae5 !important; color: #065f46 !important; border: none !important; box-shadow: none !important; }
+      .badge-expense { background: #ffe4e6 !important; color: #9f1239 !important; border: none !important; box-shadow: none !important; }
     }
   </style>
 </head>
@@ -402,14 +424,14 @@
 
   <!-- CENTERED PDF PRINT HEADER -->
   <div class="print-header">
-    <img src="https://i.postimg.cc/Vsjz1ksp/logo.png" alt="Ikmal Tech Solution Logo" class="print-logo">
+    <img src="https://i.ibb.co/xSrJcPQp/transparent-malt.png" alt="Ikmal Tech Solution Logo" class="print-logo">
     <div class="print-company-name">Ikmal Tech Solution</div>
     <div class="print-slogan">Save your money, save your property</div>
   </div>
 
   <div class="header">
     <div class="header-left">
-      <img src="https://i.postimg.cc/Vsjz1ksp/logo.png" alt="MalT Logo" class="custom-logo" onerror="this.style.display='none'">
+      <img src="https://i.ibb.co/xSrJcPQp/transparent-malt.png" alt="MalT Logo" class="custom-logo" onerror="this.style.display='none'">
       <h1 class="title">MalT Cash Flow Live Dashboard</h1>
     </div>
 
@@ -424,73 +446,80 @@
     </div>
   </div>
 
-  <!-- Downloadable Report Generator Panel -->
-  <div class="report-generator-bar">
-    <div class="section-subtitle">📄 Downloadable Detailed Report Generator</div>
-    
-    <div class="filter-group">
-      <label for="report-type">Report Type</label>
-      <select id="report-type" class="filter-select">
-        <option value="monthly">Monthly Report</option>
-        <option value="weekly">Weekly Report (This Week)</option>
-        <option value="all">Full Detailed Report (All Time)</option>
-      </select>
+  <!-- UNIFIED CONTROL PANEL: REPORT GENERATOR & FILTERS COMBINED -->
+  <div class="unified-control-panel">
+    <!-- PDF Report Generator Section -->
+    <div class="control-section">
+      <div class="section-subtitle">📄 Downloadable Detailed Report Generator</div>
+      
+      <div class="filter-group">
+        <label for="report-type">Report Type</label>
+        <select id="report-type" class="filter-select">
+          <option value="monthly">Monthly Report</option>
+          <option value="weekly">Weekly Report (This Week)</option>
+          <option value="all">Full Detailed Report (All Time)</option>
+        </select>
+      </div>
+
+      <div class="filter-group" id="month-select-group">
+        <label for="report-month">Select Specific Month</label>
+        <select id="report-month" class="filter-select">
+          <!-- Dynamically populated -->
+        </select>
+      </div>
+
+      <div class="filter-group" style="justify-content: flex-end; flex: 0 0 auto;">
+        <button class="download-btn" onclick="generateAndDownloadReport()">⬇ Download PDF Report</button>
+      </div>
     </div>
 
-    <div class="filter-group" id="month-select-group">
-      <label for="report-month">Select Specific Month</label>
-      <select id="report-month" class="filter-select">
-        <!-- Dynamically populated -->
-      </select>
-    </div>
+    <div class="control-divider"></div>
 
-    <div class="filter-group" style="justify-content: flex-end;">
-      <button class="download-btn" onclick="generateAndDownloadReport()">⬇ Download PDF Report</button>
-    </div>
-  </div>
+    <!-- Dashboard Filter Bar Section -->
+    <div class="control-section">
+      <div class="section-subtitle">🔍 Interactive Dashboard Filters</div>
 
-  <!-- Dashboard Filter Bar -->
-  <div class="filter-bar">
-    <div class="filter-group">
-      <label for="timeframe-filter">Time Period</label>
-      <select id="timeframe-filter" class="filter-select" onchange="resetPageAndRender()">
-        <option value="all">All Time</option>
-        <option value="today">Today</option>
-        <option value="weekly">This Week</option>
-        <option value="monthly">This Month</option>
-        <option value="yearly">This Year</option>
-      </select>
-    </div>
+      <div class="filter-group">
+        <label for="timeframe-filter">Time Period</label>
+        <select id="timeframe-filter" class="filter-select" onchange="resetPageAndRender()">
+          <option value="all">All Time</option>
+          <option value="today">Today</option>
+          <option value="weekly">This Week</option>
+          <option value="monthly">This Month</option>
+          <option value="yearly">This Year</option>
+        </select>
+      </div>
 
-    <div class="filter-group">
-      <label for="type-filter">Type</label>
-      <select id="type-filter" class="filter-select" onchange="resetPageAndRender()">
-        <option value="all">Income & Expense</option>
-        <option value="income">Income Only</option>
-        <option value="expense">Expense Only</option>
-      </select>
-    </div>
+      <div class="filter-group">
+        <label for="type-filter">Type</label>
+        <select id="type-filter" class="filter-select" onchange="resetPageAndRender()">
+          <option value="all">Income & Expense</option>
+          <option value="income">Income Only</option>
+          <option value="expense">Expense Only</option>
+        </select>
+      </div>
 
-    <div class="filter-group">
-      <label for="business-filter">Business</label>
-      <select id="business-filter" class="filter-select" onchange="resetPageAndRender()">
-        <option value="all">All Businesses</option>
-        <option value="printing">Printing Service</option>
-        <option value="laptop">Laptop Service</option>
-        <option value="other">Other Business</option>
-      </select>
-    </div>
+      <div class="filter-group">
+        <label for="business-filter">Business</label>
+        <select id="business-filter" class="filter-select" onchange="resetPageAndRender()">
+          <option value="all">All Businesses</option>
+          <option value="printing">Printing Service</option>
+          <option value="laptop">Laptop Service</option>
+          <option value="other">Other Business</option>
+        </select>
+      </div>
 
-    <div class="filter-group">
-      <label for="month-filter">Filter Month</label>
-      <select id="month-filter" class="filter-select" onchange="resetPageAndRender()">
-        <option value="all">All Months</option>
-      </select>
-    </div>
+      <div class="filter-group">
+        <label for="month-filter">Filter Month</label>
+        <select id="month-filter" class="filter-select" onchange="resetPageAndRender()">
+          <option value="all">All Months</option>
+        </select>
+      </div>
 
-    <div class="filter-group">
-      <label for="search-input">Search Description</label>
-      <input type="text" id="search-input" class="search-input" placeholder="Search item, method..." oninput="resetPageAndRender()">
+      <div class="filter-group">
+        <label for="search-input">Search Description</label>
+        <input type="text" id="search-input" class="search-input" placeholder="Search item, method..." oninput="resetPageAndRender()">
+      </div>
     </div>
   </div>
 
@@ -541,7 +570,7 @@
         </tr>
       </thead>
       <tbody id="table-body">
-        <tr><td colspan="7" style="text-align:center; color:#c084fc;">Loading live cash flow data...</td></tr>
+        <tr><td colspan="7" style="text-align:center; color:#e879f9;">Loading live cash flow data...</td></tr>
       </tbody>
     </table>
   </div>
@@ -735,6 +764,7 @@
         return matchesType && matchesBusiness && matchesMonth && matchesTime && matchesSearch;
       });
 
+      // Sort chronological descending (newest first)
       filtered.sort((a, b) => {
         const dateA = parseDate(a.date) || new Date(0);
         const dateB = parseDate(b.date) || new Date(0);
@@ -751,7 +781,6 @@
         } else {
           grossIncome += amt;
           
-          // Pure Gross Income per category (matches spreadsheet behavior)
           const rowBiz = (row.business || "").toLowerCase();
           if (rowBiz.includes("printing")) {
             printingGross += amt;
@@ -772,10 +801,11 @@
       const pageData = filtered.slice(startIndex, endIndex);
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#c084fc;">No matching transactions found.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#e879f9;">No matching transactions found.</td></tr>`;
       } else {
         pageData.forEach((row, index) => {
-          const rowNumber = startIndex + index + 1;
+          // Inverted row numbering: Newest data gets highest number, oldest gets lowest (1)
+          const rowNumber = filtered.length - (startIndex + index);
           const amt = Number(row.amount) || 0;
           const isExpense = row.type && row.type.toLowerCase() === "expense";
           const badgeClass = isExpense ? "badge-expense" : "badge-income";
@@ -808,7 +838,7 @@
       
       const netKpiElem = document.getElementById("kpi-net");
       netKpiElem.innerText = `RM ${netTotal.toFixed(2)}`;
-      netKpiElem.style.color = netTotal < 0 ? "#fb7185" : "#c084fc";
+      netKpiElem.style.color = netTotal < 0 ? "#fb7185" : "#e879f9";
 
       document.getElementById("kpi-printing").innerText = `RM ${printingGross.toFixed(2)}`;
       document.getElementById("kpi-laptop").innerText = `RM ${laptopGross.toFixed(2)}`;
